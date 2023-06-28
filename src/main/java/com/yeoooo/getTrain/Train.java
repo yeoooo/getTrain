@@ -22,4 +22,5 @@ public class Train {
     private String arrival_time;
     private String cost;
     private String time_cost;
+    private String reserve;
 }

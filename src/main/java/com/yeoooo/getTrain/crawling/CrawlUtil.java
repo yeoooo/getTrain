@@ -2,6 +2,7 @@ package com.yeoooo.getTrain.crawling;
 
 import com.yeoooo.getTrain.Train;
 import com.yeoooo.getTrain.exception.LoginFailedException;
+import com.yeoooo.getTrain.exception.ReserveFailedException;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -38,6 +39,8 @@ public class CrawlUtil {
      * @param to
      * @param time
      * @return ArrayList<Train> 기차 표 조회
+     *
+     * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수입니다.
      */
     public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime time, int amount) throws InterruptedException {
 
@@ -59,9 +62,9 @@ public class CrawlUtil {
 
         WebElement input_sHour = driver.findElement(By.id("s_hour"));
 
-//        WebElement input_sweek = driver.findElement(By.id("s_week"));
-        WebElement btnInq = driver.findElement(By.className("btn_inq"));
+//        WebElement input_sWeek = driver.findElement(By.id("s_week"));
 //        WebElement peop01 = driver.findElement(By.id("peop01")); // 어른 인원 수
+        WebElement btnInq = driver.findElement(By.className("btn_inq"));
         WebElement aElement = driver.findElement(By.className("btn_inq")).findElement(By.tagName("a"));
 
         input_start.sendKeys(from);
@@ -93,6 +96,8 @@ public class CrawlUtil {
             String[] train_info = table_data.get(1).getText().split("\n");
             String[] departure_info = table_data.get(2).getText().split("\n");
             String[] arrival_info = table_data.get(3).getText().split("\n");
+//            String reserve_specialty_href = table_data.get(4).findElement(By.tagName("a")).getAttribute("href");
+            String reserve_href = table_data.get(5).findElement(By.tagName("a")).getAttribute("href");
             String[] cost = table_data.get(8).getText().split("\n");
             String[] time_cost = table_data.get(13).getText().split("\n");
 
@@ -121,6 +126,7 @@ public class CrawlUtil {
                         .arrival_time(arrival_info[1])
                         .cost(cost[0])
                         .time_cost(time_cost[0])
+                        .reserve(reserve_href)
                         .build());
         }
         return trains;
@@ -173,6 +179,25 @@ public class CrawlUtil {
 
         if (driver.getTitle().equals("로그인")) {
             throw new LoginFailedException();
+        }
+        return true;
+    }
+
+    public boolean reserve(Train train) throws ReserveFailedException {
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        try {
+            jsExecutor.executeScript(train.getReserve());
+        } catch (Exception e) {
+            // 디버그용
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean chk_login(){
+        if (driver.getTitle().equals("로그인")) {
+            return false;
         }
         return true;
     }
