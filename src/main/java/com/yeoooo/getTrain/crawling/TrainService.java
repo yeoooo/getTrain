@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,15 +20,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
 
 @Getter
-public class CrawlUtil {
+@Service
+public class TrainService {
 
     private ChromeOptions options;
+    /**
+     * WebDriver를 Thread Local Variable로 관리해서 각 사용자마다 각자의 driver를 사용하게 해야함
+     */
     private WebDriver driver;
 
-    public CrawlUtil(){
+    public TrainService(){
         this.options = new ChromeOptions();
         this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
         this.driver = new ChromeDriver(options);
@@ -37,14 +41,15 @@ public class CrawlUtil {
      *
      * @param from
      * @param to
-     * @param time
+     * @param range_from
      * @return ArrayList<Train> 기차 표 조회
      *
-     * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수입니다.
+     * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수
      */
-    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime time, int amount) throws InterruptedException {
+    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until) throws InterruptedException {
 
         ArrayList<Train> trains = new ArrayList<>();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 		driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
 
@@ -70,10 +75,10 @@ public class CrawlUtil {
         input_start.sendKeys(from);
         input_get.sendKeys(to);
 
-        input_sYear.sendKeys(String.valueOf(time.getYear()));
-        input_sMonth.sendKeys(String.valueOf(time.getMonth()));
-        input_sDay.sendKeys(String.valueOf(time.getDayOfMonth()));
-        input_sHour.sendKeys(String.valueOf(time.getHour()));
+        input_sYear.sendKeys(String.valueOf(range_from.getYear()));
+        input_sMonth.sendKeys(String.valueOf(range_from.getMonth()));
+        input_sDay.sendKeys(String.valueOf(range_from.getDayOfMonth()));
+        input_sHour.sendKeys(String.valueOf(range_from.getHour()));
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
@@ -92,14 +97,26 @@ public class CrawlUtil {
                 continue;
             }
 
-            String division = table_data.get(0).getText();
-            String[] train_info = table_data.get(1).getText().split("\n");
-            String[] departure_info = table_data.get(2).getText().split("\n");
-            String[] arrival_info = table_data.get(3).getText().split("\n");
-//            String reserve_specialty_href = table_data.get(4).findElement(By.tagName("a")).getAttribute("href");
-            String reserve_href = table_data.get(5).findElement(By.tagName("a")).getAttribute("href");
-            String[] cost = table_data.get(8).getText().split("\n");
-            String[] time_cost = table_data.get(13).getText().split("\n");
+            String division;
+            String[] train_info;
+            String[] departure_info;
+            String[] arrival_info;
+            String reserve_href;
+            String[] cost;
+            String[] time_cost;
+
+            try {
+                division = table_data.get(0).getText();
+                train_info = table_data.get(1).getText().split("\n");
+                departure_info = table_data.get(2).getText().split("\n");
+                arrival_info = table_data.get(3).getText().split("\n");
+                //            String reserve_specialty_href = table_data.get(4).findElement(By.tagName("a")).getAttribute("href");
+                reserve_href = table_data.get(5).findElement(By.tagName("a")).getAttribute("href");
+                cost = table_data.get(8).getText().split("\n");
+                time_cost = table_data.get(13).getText().split("\n");
+            } catch (Exception e) {
+                continue;
+            }
 
             TrainType type = null;
             int train_id = 0;
@@ -115,22 +132,39 @@ public class CrawlUtil {
                 }
                 train_id = Integer.parseInt(train_info[0]);
             }
-            trains.add(
-                Train.builder()
-                        .division(division)
-                        .trainType(type)
-                        .train_id(train_id)
-                        .from(departure_info[0])
-                        .to(arrival_info[0])
-                        .depart_time(departure_info[1])
-                        .arrival_time(arrival_info[1])
-                        .cost(cost[0])
-                        .time_cost(time_cost[0])
-                        .reserve(reserve_href)
-                        .build());
+
+            int[] departure_time = Arrays.stream(departure_info[1].split(":")).mapToInt(x -> Integer.parseInt(x)).toArray();
+            int t_time = (departure_time[0] * 60) + departure_time[1];
+            int r_from = (range_from.getHour() * 60) + range_from.getMinute();
+            int r_until = (range_until.getHour() * 60) + range_until.getMinute();
+
+            if (r_from <= t_time && t_time <= r_until){
+                trains.add(
+                    Train.builder()
+                            .division(division)
+                            .trainType(type)
+                            .train_id(train_id)
+                            .from(departure_info[0])
+                            .to(arrival_info[0])
+                            .depart_time(departure_info[1])
+                            .arrival_time(arrival_info[1])
+                            .cost(cost[0])
+                            .time_cost(time_cost[0])
+                            .reserve(reserve_href)
+                            .build());
+            }
+
         }
         return trains;
     }
+
+    /**
+     * 로그인 페이지로 접근해 로그인을 수행하는 함숙
+     * @param loginType
+     * @param id
+     * @param pw
+     * @return
+     */
     public boolean login(LoginType loginType, String id, String pw) {
         driver.get("https://www.letskorail.com/korail/com/login.do");
         WebElement aElement = driver.findElement(By.className("btn_login")).findElement(By.tagName("a"));
@@ -177,9 +211,9 @@ public class CrawlUtil {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        if (driver.getTitle().equals("로그인")) {
-            throw new LoginFailedException();
-        }
+//        if (driver.getTitle().equals("로그인")) {
+//            throw new LoginFailedException();
+//        }
         return true;
     }
 
@@ -187,6 +221,7 @@ public class CrawlUtil {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         try {
             jsExecutor.executeScript(train.getReserve());
+            driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
         } catch (Exception e) {
             // 디버그용
             e.printStackTrace();
@@ -200,6 +235,15 @@ public class CrawlUtil {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 드라이버에 접근해 드라이버를 끄는 함수
+     * 이 또한 로컬 스레드 변수의 드라이버를 꺼야함
+     */
+    public void quit() {
+        driver.quit();
+        System.out.println("드라이버 종료.");
     }
 
 }
