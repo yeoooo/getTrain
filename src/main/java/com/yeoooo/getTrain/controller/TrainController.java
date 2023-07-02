@@ -70,7 +70,7 @@ public class TrainController {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         while (stop) {
-            ArrayList<Train> arrivals = trainService.get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter));
+            ArrayList<Train> arrivals = trainService.get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
             if (!arrivals.isEmpty()) {
                 if (trainService.reserve(arrivals.get(0))) {
                     mailUtil.sendEmail(email, arrivals.get(0));

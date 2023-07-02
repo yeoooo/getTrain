@@ -1,7 +1,6 @@
 package com.yeoooo.getTrain.crawling;
 
 import com.yeoooo.getTrain.Train;
-import com.yeoooo.getTrain.exception.LoginFailedException;
 import com.yeoooo.getTrain.exception.ReserveFailedException;
 import lombok.Getter;
 import org.openqa.selenium.By;
@@ -46,7 +45,7 @@ public class TrainService {
      *
      * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수
      */
-    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until) throws InterruptedException {
+    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until, TrainType trainType) throws InterruptedException {
 
         ArrayList<Train> trains = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -138,7 +137,7 @@ public class TrainService {
             int r_from = (range_from.getHour() * 60) + range_from.getMinute();
             int r_until = (range_until.getHour() * 60) + range_until.getMinute();
 
-            if (r_from <= t_time && t_time <= r_until){
+            if (r_from <= t_time && t_time <= r_until && (trainType == TrainType.ALL || trainType.equals(type))){
                 trains.add(
                     Train.builder()
                             .division(division)
