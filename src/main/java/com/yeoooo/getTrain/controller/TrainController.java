@@ -33,6 +33,7 @@ public class TrainController {
     @GetMapping("api/v1/reserve/quit")
     public ApiResponse<String> quit(){
         trainService.quit();
+        System.out.println("!! 멈춰 !!");
         return ApiResponse.ok("quit");
     }
 
