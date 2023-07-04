@@ -1,9 +1,14 @@
 package com.yeoooo.getTrain.crawling;
 
 import com.yeoooo.getTrain.Train;
-import com.yeoooo.getTrain.exception.LoginFailedException;
+import com.yeoooo.getTrain.TrainDTO;
 import com.yeoooo.getTrain.exception.ReserveFailedException;
+import com.yeoooo.getTrain.util.ApiResponse;
+import com.yeoooo.getTrain.util.MailUtil;
+import com.yeoooo.getTrain.util.RequestTimer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,29 +17,43 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Service
-public class TrainService {
+@NoArgsConstructor
+public class TrainService implements InitializingBean,DisposableBean {
 
     private ChromeOptions options;
     /**
      * WebDriver를 Thread Local Variable로 관리해서 각 사용자마다 각자의 driver를 사용하게 해야함
      */
     private WebDriver driver;
+    private String email;
+    private RequestTimer timer;
+    private MailUtil mailUtil;
 
-    public TrainService(){
+    @Setter
+    private boolean stop;
+
+
+    public TrainService(String email, MailUtil mailUtil){
         this.options = new ChromeOptions();
         this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
         this.driver = new ChromeDriver(options);
+        this.email = email;
+//        this.timer = new RequestTimer(3600000);// 로그인 시 1시간 동안 Timeout 설정
+        this.timer = new RequestTimer(3600000);// 로그인 시 1시간 동안 Timeout 설정
+        this.mailUtil = mailUtil;
     }
 
     /**
@@ -46,7 +65,7 @@ public class TrainService {
      *
      * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수
      */
-    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until) throws InterruptedException {
+    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until, TrainType trainType) throws InterruptedException {
 
         ArrayList<Train> trains = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -138,7 +157,7 @@ public class TrainService {
             int r_from = (range_from.getHour() * 60) + range_from.getMinute();
             int r_until = (range_until.getHour() * 60) + range_until.getMinute();
 
-            if (r_from <= t_time && t_time <= r_until){
+            if (r_from <= t_time && t_time <= r_until && (trainType == TrainType.ALL || trainType.equals(type))){
                 trains.add(
                     Train.builder()
                             .division(division)
@@ -230,6 +249,34 @@ public class TrainService {
         return true;
     }
 
+    /**
+     * 예약 매크로 함수
+     * delay는 1초
+     *
+     * @param req_train
+     * @return
+     * @throws InterruptedException
+     * @throws ReserveFailedException
+     */
+    public Optional<Train> reserve_pipeLine(TrainDTO req_train) throws InterruptedException, ReserveFailedException {
+        stop = true;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        while (stop) {
+            ArrayList<Train> arrivals = get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
+            if (!arrivals.isEmpty()) {
+                if (reserve(arrivals.get(0))) {
+                    mailUtil.sendEmail(email, arrivals.get(0));
+                    return Optional.ofNullable(arrivals.get(0));
+                }
+
+            }else{
+                System.out.println("\r예약중..");
+            }
+            Thread.sleep(1000);
+        }
+        return Optional.of(null);
+    }
+
     public boolean chk_login(){
         if (driver.getTitle().equals("로그인")) {
             return false;
@@ -237,13 +284,18 @@ public class TrainService {
         return true;
     }
 
-    /**
-     * 드라이버에 접근해 드라이버를 끄는 함수
-     * 이 또한 로컬 스레드 변수의 드라이버를 꺼야함
-     */
     public void quit() {
         driver.quit();
         System.out.println("드라이버 종료.");
     }
 
+    @Override
+    public void destroy() throws Exception {
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
 }
