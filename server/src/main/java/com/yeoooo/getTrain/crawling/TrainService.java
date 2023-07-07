@@ -3,12 +3,11 @@ package com.yeoooo.getTrain.crawling;
 import com.yeoooo.getTrain.Train;
 import com.yeoooo.getTrain.TrainDTO;
 import com.yeoooo.getTrain.exception.ReserveFailedException;
-import com.yeoooo.getTrain.util.ApiResponse;
 import com.yeoooo.getTrain.util.MailUtil;
-import com.yeoooo.getTrain.util.RequestTimer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -19,8 +18,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -31,16 +28,16 @@ import java.util.*;
 @Getter
 @Service
 @NoArgsConstructor
+@Slf4j
 public class TrainService implements InitializingBean,DisposableBean {
 
     private ChromeOptions options;
-    /**
-     * WebDriver를 Thread Local Variable로 관리해서 각 사용자마다 각자의 driver를 사용하게 해야함
-     */
     private WebDriver driver;
     private String email;
-    private RequestTimer timer;
     private MailUtil mailUtil;
+
+    @Setter
+    private LocalDateTime lastRequestTime;
 
     @Setter
     private boolean stop;
@@ -48,11 +45,10 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     public TrainService(String email, MailUtil mailUtil){
         this.options = new ChromeOptions();
-        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
+//        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
         this.driver = new ChromeDriver(options);
         this.email = email;
-//        this.timer = new RequestTimer(3600000);// 로그인 시 1시간 동안 Timeout 설정
-        this.timer = new RequestTimer(3600000);// 로그인 시 1시간 동안 Timeout 설정
+        this.lastRequestTime = LocalDateTime.now();
         this.mailUtil = mailUtil;
     }
 
@@ -226,13 +222,9 @@ public class TrainService implements InitializingBean,DisposableBean {
             input_txtPwd.sendKeys(pw);
         }
 
-
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-//        if (driver.getTitle().equals("로그인")) {
-//            throw new LoginFailedException();
-//        }
         return true;
     }
 
@@ -259,7 +251,9 @@ public class TrainService implements InitializingBean,DisposableBean {
      * @throws ReserveFailedException
      */
     public Optional<Train> reserve_pipeLine(TrainDTO req_train) throws InterruptedException, ReserveFailedException {
-        stop = true;
+        setStop(true);
+        setLastRequestTime(LocalDateTime.now());
+
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         while (stop) {
             ArrayList<Train> arrivals = get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
@@ -270,13 +264,33 @@ public class TrainService implements InitializingBean,DisposableBean {
                 }
 
             }else{
-                System.out.println("\r예약중..");
+                log.info("\r [TrainService] - {} 예약중..", email);
             }
             Thread.sleep(1000);
         }
-        return Optional.of(null);
+        return Optional.ofNullable(null);
     }
 
+    /**
+     * 드라이버를 통해 로그아웃을 수행하는 함수
+     */
+    public void logout() {
+        driver.get("https://www.letskorail.com/ebizprd/prdMain.do");
+        WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(2);
+        WebElement aElement = logout_li.findElement(By.tagName("a"));
+
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        jsExecutor.executeScript(aElement.getAttribute("onclick"));
+
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        webDriverWait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+    }
+
+    /**
+     * 로그인 여부 확인 함수
+     * @return
+     */
     public boolean chk_login(){
         if (driver.getTitle().equals("로그인")) {
             return false;
@@ -284,10 +298,13 @@ public class TrainService implements InitializingBean,DisposableBean {
         return true;
     }
 
+    /**
+     * 드라이버 종료 함수
+     */
     public void quit() {
         driver.quit();
-        System.out.println("드라이버 종료.");
     }
+
 
     @Override
     public void destroy() throws Exception {
