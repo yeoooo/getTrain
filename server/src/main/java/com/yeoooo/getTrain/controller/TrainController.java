@@ -36,11 +36,12 @@ public class TrainController {
     }
 
     @RequestMapping("/api/v1/login")
-    public ApiResponse<Map> login(@RequestBody Map<String, Object> req, @RequestParam("email") String email) {
-        TrainService trainService = trainServicePool.putInstanceByEmail(email);
-
+    public ApiResponse<Map> login(@RequestBody Map<String, Object> req) {
         Map<String, Object> data = (Map) req.get("data");
         Map<String, String> user = (Map) data.get("user");
+        String email = user.get("email");
+
+        TrainService trainService = trainServicePool.putInstanceByEmail(email);
 
         if (trainService.login(LoginType.valueOf(user.get("type")), user.get("id"), user.get("pw"))) {
             return ApiResponse.ok(user);
@@ -74,5 +75,15 @@ public class TrainController {
          */
 
         return ApiResponse.ok(res);
+    }
+
+    @RequestMapping("/api/v1/logout")
+    public ApiResponse<String> logout(@RequestBody Map<String, Object> req) {
+        Map<String, Object> data = (Map) req.get("data");
+        String email = (String) data.get("email");
+
+        TrainService trainService = trainServicePool.getInstanceByEmail(email);
+        trainService.logout();
+        return ApiResponse.ok("success");
     }
 }
