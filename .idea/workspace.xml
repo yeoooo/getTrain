@@ -1,22 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3af57df-3c83-4229-9953-a74325d6c886" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/HELP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yeoooo/getTrain/GetTrainApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/yeoooo/getTrain/GetTrainApplicationTests.java" afterDir="false" />
+    <list default="true" id="a3af57df-3c83-4229-9953-a74325d6c886" name="Changes" comment="chore: 의존성 추가&#10;&#10;Spring mail 모듈 추가&#10;ModelMapper 추가">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/getTrain.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/getTrain.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yeoooo/getTrain/GetTrainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yeoooo/getTrain/GetTrainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yeoooo/getTrain/PipeLine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yeoooo/getTrain/util/Util.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,19 +61,42 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/kyeong/dev/getTrain",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/kyeong/dev/getTrain&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;58fe2846ba64105219aae681056dbb60&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="GetTrainApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="getTrain.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.yeoooo.getTrain.GetTrainApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -50,11 +106,135 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687703134961</updated>
-      <workItem from="1687703136466" duration="232000" />
+      <workItem from="1687703136466" duration="20235000" />
+      <workItem from="1687959905911" duration="6619000" />
+      <workItem from="1688007651075" duration="12653000" />
+      <workItem from="1688307680696" duration="7391000" />
+      <workItem from="1688447089892" duration="10711000" />
+      <workItem from="1688482713675" duration="634000" />
     </task>
+    <task id="LOCAL-00001" summary="feat : 크롤링 - 로그인 기능 추가&#10;&#10;build.gradle&#10; - Selenium 의존성 추가&#10;LoginType 추가&#10;LoginFailedException 추가&#10;CrawlUtil 추가">
+      <created>1687770257128</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1687770257128</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat : Train 객체 추가&#10;&#10;기본 속성 추가">
+      <created>1687770278572</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1687770278572</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat : 열차 정보 크롤링 추가&#10;&#10;List&lt;Train&gt; 반환&#10;Train 필드 추가&#10;TrainType 추가">
+      <created>1687782320629</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1687782320629</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat : 열차 예약 기능&#10;&#10;Train 예약 링크 추가&#10;예약 실패 예외 추가">
+      <created>1687963088398</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1687963088398</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat : Util, PipeLine 추가(개발 되지 않음)&#10;&#10;Util -&gt; Email Sender 추가 예정&#10;pipeLine -&gt; 조회 - 예약 프로세스 반복 추가 예정">
+      <created>1687963146391</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1687963146391</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat : Mail 기능 추가&#10;&#10;메일 전송 기능 추가&#10;빈으로 등록">
+      <created>1688027408140</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1688027408140</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat : Controller 추가 &#10;&#10;DTO(기차 종류, 출발지, 목적지, 출발 시간, 도착시간) 추가&#10;API 요청에 대한 예약, 메일 발송 기능 추가&#10;API Response 추가">
+      <created>1688027489388</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1688027489388</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat: 시간 범위에 따른 검색, CrawlUtil -&gt; TrainService 이름 변경 및 리팩터링&#10;&#10;주석 추가&#10;변수 변경 time -&gt; range_from&#10;변수 추가 range_until&#10;&#10;범위를 분으로 환산하여 범위에 맞는 열차를 추출하는 기능 추가 &#10;예약 후 페이지를 다시 열차 조회 화면으로 이동하는 기능 추가&#10;드라이버를 종료하는 quit() 함수 추가">
+      <created>1688027656647</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1688027656647</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat: Train Type 추가">
+      <created>1688309892518</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1688309892518</updated>
+    </task>
+    <task id="LOCAL-00010" summary="develop : driver 개인화 진행중">
+      <created>1688396123114</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1688396123114</updated>
+    </task>
+    <task id="LOCAL-00011" summary="feat: TrainService 개인화 &#10;&#10;reserve_pipeline 메서드 중지 기능 추가&#10;InstancePool (TrainServicePool) 추가&#10;요청 양식 변경(email)&#10;TrainService.reserve_pipeLine 추가">
+      <created>1688481073349</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1688481073349</updated>
+    </task>
+    <task id="LOCAL-00012" summary="develop: 타이머 개발중&#10;&#10;개인화된 서비스 객체에 일정시간 동안 &#10;요청이 없다면 해당 서비스에 대해&#10;driver.quit(),&#10;trainService.destory()&#10;를 실행하는 타이머 개발 중">
+      <created>1688481164593</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1688481164593</updated>
+    </task>
+    <task id="LOCAL-00013" summary="chore: 의존성 추가&#10;&#10;Spring mail 모듈 추가&#10;ModelMapper 추가">
+      <created>1688481211128</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1688481211128</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat : 크롤링 - 로그인 기능 추가&#10;&#10;build.gradle&#10; - Selenium 의존성 추가&#10;LoginType 추가&#10;LoginFailedException 추가&#10;CrawlUtil 추가" />
+    <MESSAGE value="feat : Train 객체 추가&#10;&#10;기본 속성 추가" />
+    <MESSAGE value="feat : 열차 정보 크롤링 추가&#10;&#10;List&lt;Train&gt; 반환&#10;Train 필드 추가&#10;TrainType 추가" />
+    <MESSAGE value="feat : 열차 예약 기능&#10;&#10;Train 예약 링크 추가&#10;예약 실패 예외 추가" />
+    <MESSAGE value="feat : Util, PipeLine 추가(개발 되지 않음)&#10;&#10;Util -&gt; Email Sender 추가 예정&#10;pipeLine -&gt; 조회 - 예약 프로세스 반복 추가 예정" />
+    <MESSAGE value="feat : Mail 기능 추가&#10;&#10;메일 전송 기능 추가&#10;빈으로 등록" />
+    <MESSAGE value="feat : Controller 추가 &#10;&#10;DTO(기차 종류, 출발지, 목적지, 출발 시간, 도착시간) 추가&#10;API 요청에 대한 예약, 메일 발송 기능 추가&#10;API Response 추가" />
+    <MESSAGE value="feat: 시간 범위에 따른 검색, CrawlUtil -&gt; TrainService 이름 변경 및 리팩터링&#10;&#10;주석 추가&#10;변수 변경 time -&gt; range_from&#10;변수 추가 range_until&#10;&#10;범위를 분으로 환산하여 범위에 맞는 열차를 추출하는 기능 추가 &#10;예약 후 페이지를 다시 열차 조회 화면으로 이동하는 기능 추가&#10;드라이버를 종료하는 quit() 함수 추가" />
+    <MESSAGE value="feat: Train Type 추가" />
+    <MESSAGE value="develop : driver 개인화 진행중" />
+    <MESSAGE value="feat: TrainService 개인화 &#10;&#10;reserve_pipeline 메서드 중지 기능 추가&#10;InstancePool (TrainServicePool) 추가&#10;요청 양식 변경(email)&#10;TrainService.reserve_pipeLine 추가" />
+    <MESSAGE value="develop: 타이머 개발중&#10;&#10;개인화된 서비스 객체에 일정시간 동안 &#10;요청이 없다면 해당 서비스에 대해&#10;driver.quit(),&#10;trainService.destory()&#10;를 실행하는 타이머 개발 중" />
+    <MESSAGE value="chore: 의존성 추가&#10;&#10;Spring mail 모듈 추가&#10;ModelMapper 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: 의존성 추가&#10;&#10;Spring mail 모듈 추가&#10;ModelMapper 추가" />
   </component>
 </project>
