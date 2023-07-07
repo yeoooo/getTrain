@@ -21,8 +21,8 @@ public class MailUtil {
 
     public void sendEmail(String email, Train train) {
         String subject = train.getDepart_time() + " 출발 " + "[" + train.getFrom() + " -> " + train.getTo() + "]" + " 열차 예약 알림";
-        String content = "20분 내로 결제를 진행해 주세요 !";
-        String from = "보내는 이 <devyeooo@gmail.com>";
+        String content = "10분 내로 결제를 진행해 주세요 !";
+        String from = "Get Your Train ! <devyeooo@gmail.com>";
         String to = "받는 이 <" + email + ">";
 
         try{
