@@ -1,0 +1,53 @@
+.main-bg{
+    background-color: #E9E9E9;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginBox{
+    border-radius: 1rem;
+    padding: 5rem;
+    width: 80rem;
+    height: 50rem;
+    background-color: #FFFFFF;
+    box-shadow: #a3a3a3 10px 10px 10px;
+}
+
+.loginBox h1{
+    font-size: 4rem;
+    text-align: center;
+    letter-spacing: 0.5rem;
+}
+
+.tab-menu{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 5rem 0;
+}
+
+.tab-menu > span{
+    font-size: 1.5rem;
+}
+
+.login-input{
+    display: grid;
+    justify-content: center;
+}
+
+.login-input > div {
+    margin: 1rem 0;
+}
+
+.login-input > input{
+    border-bottom: 1px solid #315A52;
+}
+
+.login-input > button{
+    background-color: #315A52;
+    padding: 0.5rem 2rem;
+    margin: 2rem 0 0 0;
+    color: #FFFFFF;
+}
