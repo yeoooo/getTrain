@@ -4,8 +4,10 @@ import com.yeoooo.getTrain.crawling.TrainService;
 import com.yeoooo.getTrain.util.MailUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
+@EnableScheduling
 public class MVCConfig {
     @Bean
     public MailUtil mailUtil() {
