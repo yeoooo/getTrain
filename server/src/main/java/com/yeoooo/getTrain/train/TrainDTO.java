@@ -1,6 +1,5 @@
-package com.yeoooo.getTrain;
+package com.yeoooo.getTrain.train;
 
-import com.yeoooo.getTrain.crawling.TrainType;
 import lombok.*;
 
 @AllArgsConstructor
