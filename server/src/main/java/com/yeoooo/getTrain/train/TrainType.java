@@ -1,4 +1,4 @@
-package com.yeoooo.getTrain.crawling;
+package com.yeoooo.getTrain.train;
 
 public enum TrainType {
     ALL, KTX, ITX, MUGUNGHWA
