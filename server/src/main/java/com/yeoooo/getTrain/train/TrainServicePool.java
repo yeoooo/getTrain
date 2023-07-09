@@ -1,6 +1,6 @@
-package com.yeoooo.getTrain.util;
+package com.yeoooo.getTrain.train;
 
-import com.yeoooo.getTrain.crawling.TrainService;
+import com.yeoooo.getTrain.util.MailUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -21,20 +21,21 @@ import java.util.Map;
 public class TrainServicePool {
 
     private final MailUtil mailUtil;
-    private final long MAX_IDLE_TIME_IN_SECONDS = 1800; //sec , 30분 후 인스턴스 파기
+//    private final long MAX_IDLE_TIME_IN_SECONDS = 1800; //sec , 30분 후 인스턴스 파기
+    private final long MAX_IDLE_TIME_IN_SECONDS = 20; //디버깅용 20초 후 인스턴스 파기
 
     @Getter
-    private Map<String, TrainService> pool = new HashMap<>();
+    private static Map<String, TrainService> pool = new HashMap<>();
 
     public TrainService getInstanceByEmail(String email) {
         return pool.get(email);
     }
 
-    public TrainService putInstanceByEmail(String email) {
+    public TrainService putInstanceByEmail(String email, String clientIP) {
         if (pool.containsKey(email)) {
             return pool.get(email);
         }
-        TrainService service = new TrainService(email, mailUtil);
+        TrainService service = new TrainService(clientIP, email, mailUtil);
         pool.put(email, service);
         return service;
     }
@@ -55,7 +56,8 @@ public class TrainServicePool {
      * 매 분 인스턴스에 요청이 들어왔는지 확인한 후
      * 요청이 들어오지 않았다면 인스턴스를 파기하는 함수
      */
-    @Scheduled(fixedRate = 60000) // 60000 Check every minute
+//    @Scheduled(fixedRate = 60000) // 60000 매 분 실행
+    @Scheduled(fixedRate = 10000) // 10000 매 10초 실행
     public void checkIdleTrainServices() {
         log.info("[TrainServicePool] : {}", pool);
         Iterator<Map.Entry<String, TrainService>> iterator = pool.entrySet().iterator();
@@ -77,6 +79,19 @@ public class TrainServicePool {
                 }
             }
         }
+    }
+
+    public static boolean is_using(String ip) {
+        Iterator<Map.Entry<String, TrainService>> iterator = TrainServicePool.getPool().entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, TrainService> next = iterator.next();
+            TrainService value = next.getValue();
+            if (value.getIp() == ip) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

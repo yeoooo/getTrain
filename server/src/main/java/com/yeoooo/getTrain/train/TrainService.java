@@ -1,7 +1,5 @@
-package com.yeoooo.getTrain.crawling;
+package com.yeoooo.getTrain.train;
 
-import com.yeoooo.getTrain.Train;
-import com.yeoooo.getTrain.TrainDTO;
 import com.yeoooo.getTrain.exception.ReserveFailedException;
 import com.yeoooo.getTrain.util.MailUtil;
 import lombok.Getter;
@@ -34,8 +32,8 @@ public class TrainService implements InitializingBean,DisposableBean {
     private ChromeOptions options;
     private WebDriver driver;
     private String email;
+    private String ip;
     private MailUtil mailUtil;
-
     @Setter
     private LocalDateTime lastRequestTime;
 
@@ -43,10 +41,11 @@ public class TrainService implements InitializingBean,DisposableBean {
     private boolean stop;
 
 
-    public TrainService(String email, MailUtil mailUtil){
+    public TrainService(String ip, String email, MailUtil mailUtil){
         this.options = new ChromeOptions();
-//        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
+        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
         this.driver = new ChromeDriver(options);
+        this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
         this.mailUtil = mailUtil;
@@ -297,6 +296,7 @@ public class TrainService implements InitializingBean,DisposableBean {
         }
         return true;
     }
+
 
     /**
      * 드라이버 종료 함수
