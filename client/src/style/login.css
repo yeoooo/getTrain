@@ -16,12 +16,6 @@
     box-shadow: #a3a3a3 10px 10px 10px;
 }
 
-.loginBox h1{
-    font-size: 4rem;
-    text-align: center;
-    letter-spacing: 0.5rem;
-}
-
 .tab-menu{
     display: flex;
     justify-content: space-evenly;
@@ -39,10 +33,18 @@
 
 .login-input > div {
     margin: 1rem 0;
+    align-items: center;
+    align-content: center;
 }
 
-.login-input > input{
+.login-input > div > input{
     border-bottom: 1px solid #315A52;
+}
+
+.login-input > div > img{
+    border-bottom: 1px solid #315A52;
+    width: 25px;
+    height: 25px;
 }
 
 .login-input > button{
@@ -50,4 +52,14 @@
     padding: 0.5rem 2rem;
     margin: 2rem 0 0 0;
     color: #FFFFFF;
+}
+
+.logo-img{
+    display: flex;
+    justify-content: center;
+}
+
+.logo-img > img {
+    width: 200px;
+    height: 40px;
 }
