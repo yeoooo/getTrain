@@ -3,10 +3,10 @@ import '../../style/login.css'
 
 function LoginCard(props){
     return(
-        <div className='loginBox'>
-            <div className='logo-img'>
+        <article className='login-box'>
+            <header className='logo-img'>
                 <img src='../../src/assets/logo.png' alt='logo image' />
-            </div>
+            </header>
             
 
             <div className='tab-menu'>
@@ -27,9 +27,8 @@ function LoginCard(props){
                 </div>
                 
                 <button type='submit'>LOGIN</button>
-                <a href='../../src/@pages/SearchFormPage'> 열차 조회 페이지 </a>
             </form>
-        </div> 
+        </article> 
     );
 }
 

@@ -1,0 +1,51 @@
+header > h1{
+    margin: 7rem 0 0 7rem;
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+header > p {
+    margin: 2rem 0 0 7.5rem;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+
+.input-warpper {
+    display: flex;
+    justify-content: center;
+    margin: 6rem 0 3rem 0;
+}
+
+.input-box {
+    background-color: #f7f7f7;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 80rem;
+    height: 20rem;
+    box-shadow: #b9b9b9 3px 5px 5px;
+}
+
+.input-box-header {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.train-icon{
+    width: 2rem;
+    height: 2rem;
+    margin: 0 1.5rem 0 0;
+}
+
+.input-box-header > h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.arrow-icon {
+    width: 3rem;
+    height: 1.8rem;
+    position: absolute;
+    left: 71rem;
+}
