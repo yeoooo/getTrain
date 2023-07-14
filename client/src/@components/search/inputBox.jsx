@@ -1,7 +1,9 @@
 import React from 'react'
 import '../../style/searchForm.css'
+import styled from 'styled-components';
+import CheckBox from './checkBox'
 
-function inputBox(props){
+function InputBox(props){
     return(
         <div className='input-warpper'>
             <div className='input-box'>
@@ -10,10 +12,13 @@ function inputBox(props){
                     <h3>{props.title}</h3>
                     <img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' />
                 </div>
-                
+                <CheckBox />
             </div>
         </div>
     );
 }
 
-export default inputBox
+const StyledTable = styled.table `
+    
+`;
+export default InputBox
