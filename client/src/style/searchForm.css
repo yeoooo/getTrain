@@ -20,9 +20,11 @@ header > p {
 .input-box {
     background-color: #f7f7f7;
     border-radius: 1rem;
-    padding: 2rem;
-    width: 80rem;
-    height: 20rem;
+    padding: 2.5rem 3rem 5rem 3rem;
+    /* width: 80rem;
+    height: 20rem; */
+    width: 60%;
+    height: 30%;
     box-shadow: #b9b9b9 3px 5px 5px;
 }
 
@@ -47,7 +49,8 @@ header > p {
     width: 3rem;
     height: 1.8rem;
     position: absolute;
-    left: 71rem;
+    left: 80rem;
+    bottom: 0.8rem
 }
 .checkBox-wrap{
     display: flex;
@@ -98,4 +101,5 @@ header > p {
     width: 17rem;
     height: 3.2rem;
     padding: 0.5rem;
+    background-color: #ffffff;
 }
