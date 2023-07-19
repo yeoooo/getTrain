@@ -13,6 +13,7 @@ function SearchForm(props){
             <section>
                 <InputBox icon='../../src/assets/train.png' title='열차 종류를 선택해주세요'/>
                 <InputBox icon='../../src/assets/train.png' title='출발역 → 도착역'/>
+                <InputBox icon='../../src/assets/calendar.png' title='출발일을 선택해주세요'/>
             </section>
             
         </div>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../style/searchForm.css'
 import styled from 'styled-components';
 
-function InputStation(){
+function Station(){
     return(
         <div>
             <div className='station-wrap'>
@@ -13,9 +13,8 @@ function InputStation(){
                 <p>도착역</p>
                 <input type='text' name='departure' placeholder='  도착역을 입력해주세요.'/>
             </div>
-        
         </div>
     );
 }
 
-export default InputStation
+export default Station
