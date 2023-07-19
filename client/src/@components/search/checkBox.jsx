@@ -14,15 +14,31 @@ function CheckBox(){
     ];
 
     // 선택값이 들어갈 빈 배열
-    const [checkItems, setCheckedList] = useState([]); 
+    const [checkItem, setCheckedItem] = useState(null); 
     // onChange함수를 사용하여 이벤트 감지 후 값 가져오기
-    const onCheckedElement = (checked, id) => {
-        if(checked){
-            setCheckedList(prev => [...prev, id]);
-        } else if (!checked){
-            setCheckedList(checkItems.filter((el) => el !== id));
+    // checked는 boolean형태로 반환
+    // 복수 선택
+    // const onCheckedElement = (checked, id) => {
+    //     if(checked){
+    //         setCheckedList(prev => [...prev, id]);
+    //     } else if (!checked){
+    //         setCheckedList(checkItems.filter((el) => el !== id));
+    //     } else if(checkItems.length > 1){
+    //         checkItems.splice(0, 1);
+    //     }
+    //     console.log(checkItems.length);
+    // };
+
+    // 단일 선택
+    const onCheckedElement = (id) => {
+        if(checkItem === id){
+            setCheckedItem(null);
+        } else {
+            setCheckedItem(id);
         }
-    };
+
+        
+    }
 
     return(
         <CheckBoxWrapper>
@@ -31,8 +47,14 @@ function CheckBox(){
                 <input 
                     type='checkbox' 
                     name={`select-${CATEGORY_LIST.id}`}
-                    onChange={(e) => onCheckedElement(e.target.checked, CATEGORY_LIST.id)}
-                    checked={checkItems.includes(CATEGORY_LIST.id) ? true : false} />
+                    // onCheckedElement 실행
+                    // onChange={(e) => onCheckedElement(e.target.checked, CATEGORY_LIST.id)}
+                    onChange={() => onCheckedElement(CATEGORY_LIST.id)}
+
+                    // checked는 boolean형태로 반환
+                    // checked={checkItem.includes(CATEGORY_LIST.id) ? true : false} 
+                    checked = {checkItem === CATEGORY_LIST.id}
+                    />
                 <p>{CATEGORY_LIST.data}</p>
             </div>
             ))}
