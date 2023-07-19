@@ -56,8 +56,11 @@ header > p {
     display: flex;
     align-items: center;
     margin: 3rem 0 0 0;
-    flex-flow: wrap;
+
+    justify-content: center;
+    flex-wrap: wrap;
 }
+
 .checkBox-wrap > input {
     appearance: none;
     border-color: #ffffff;
@@ -78,7 +81,7 @@ header > p {
 }
 
 .checkBox-wrap > p {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 500;
 }
 
