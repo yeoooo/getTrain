@@ -20,7 +20,6 @@ function CheckBox(props){
     const onCheckedElement = (id) => {
         if(checkItem === id){
             setCheckedItem(null);
-            props.handleSelectedItem(null);
         } else {
             setCheckedItem(id);
             const selectedItemData = CATEGORY_LIST.find(item => item.id === id)?.data;
@@ -40,18 +39,15 @@ function CheckBox(props){
                     type='checkbox' 
                     name={`select-${CATEGORY_LIST.id}`}
                     // onCheckedElement 실행
-                    // onChange={(e) => onCheckedElement(e.target.checked, CATEGORY_LIST.id)}
                     onChange={() => onCheckedElement(CATEGORY_LIST.id)}
 
-                    // checked는 boolean형태로 반환
-                    // checked={checkItem.includes(CATEGORY_LIST.id) ? true : false} 
+                    // checked는 id형태로 반환
                     checked = {checkItem === CATEGORY_LIST.id}
                     />
                     
                 <p>{CATEGORY_LIST.data}</p>
             </div> 
             ))}
-            <p>선택된 항목 : {selectedItem}</p>
         </CheckBoxWrapper>
         
         
@@ -59,7 +55,12 @@ function CheckBox(props){
 }
 
 const CheckBoxWrapper = styled.div `
-    display: ${({ open }) => (open ? 'flex' : 'none')};
+    display: flex;
+    opacity: ${({ open }) => (open ? '1' : '0')};
+    visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+    max-height: ${({ open }) => (open ? '3rem' : '0')};
+    display: flex;
+    transition: opacity 0.1s, visibility 0.3s, max-height 0.3s;
     justify-content: space-around;
 `;
 export default CheckBox

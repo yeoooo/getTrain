@@ -22,10 +22,7 @@ header > p {
     background-color: #f7f7f7;
     border-radius: 1rem;
     padding: 2.5rem 3rem 5rem 3rem;
-    /* width: 80rem;
-    height: 20rem; */
     width: 60%;
-    /* height: 30%; */
     box-shadow: #b9b9b9 3px 5px 5px;
 }
 
@@ -51,11 +48,12 @@ header > p {
     height: 1.8rem;
     position: absolute;
     left: 80rem;
-    bottom: 0.8rem
+    bottom: 0.8rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
 }
 
-/* CheckBox */
-
+/* 열차 종류 체크박스 */
 .checkBox-wrap{
     display: flex;
     align-items: center;
@@ -64,7 +62,7 @@ header > p {
     justify-content: center;
     flex-wrap: wrap;
 
-    transition: height 0.35s ease;
+    transition: all 0.35s ease;
 }
 
 .checkBox-wrap > input {
@@ -91,6 +89,7 @@ header > p {
     font-weight: 500;
 }
 
+/* 출발역-도착역 선택 */
 .station-wrap{
     display: flex;
     align-items: center;
