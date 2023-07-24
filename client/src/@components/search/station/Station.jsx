@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import '../../style/searchForm.css'
+import '../../../style/searchForm.css'
 import styled from 'styled-components';
-import { STATION_DATA } from '../../core/stationData';
+import { STATION_DATA } from '../../../core/stationData';
 
-function Station(){
+function Station(props){
     // 입력값 자동완성 기능 (출발역)
     const [inputValue, setInputValue] = useState('');                   // 입력값
     const [isHaveInputValue, setIsHaveInputValue] = useState(false);    // 입력값 인지
@@ -24,7 +24,7 @@ function Station(){
         }
     }
 
-    // 입력값 갱신
+    // 입력값 실시간 갱신
     const changeInputValue = event => {
         setInputValue(event.target.value);
         setIsHaveInputValue(true);
@@ -34,6 +34,7 @@ function Station(){
     const clickDropDownItem = clickedItem => {
         setInputValue(clickedItem);
         setIsHaveInputValue(false);
+        props.handleSelectedItem(clickedItem);
     }
 
     // 입력값이 변할 때 마다 반복해서(hook) 입력값에 해당하는 데이터를 갱신하여 보여준다.
@@ -67,12 +68,13 @@ function Station(){
     const clickArrivalDropDownItem = clickedItem => {
         setArrivalInputValue(clickedItem);
         setIsHaveArrivalInputValue(false);
+        props.handleSelectedItem(clickedItem);
     }
 
     useEffect(showArrivalDropDownList, [arrivalInputValue])
 
     return(
-        <StationWrapper>
+        <StationWrapper open={props.isOpen}>
             <StationInputContainer>
                 {/* 출발역 입력 */}
                 <p>출발역</p>
@@ -156,6 +158,11 @@ const StationWrapper = styled.div`
     align-items: center;
     margin: 3rem 0 0 0;
     justify-content: space-evenly;
+
+    opacity: ${({ open }) => (open ? '1' : '0')};
+    visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+    max-height: ${({ open }) => (open ? '3rem' : '0')};
+    transition: opacity 0.1s, visibility 0.3s, max-height 0.3s;
 `
 const StationInputContainer = styled.div`
   display: flex;

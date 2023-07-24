@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../style/searchForm.css'
+import '../../../style/searchForm.css'
 import styled from 'styled-components';
 
 function CheckBox(props){
@@ -59,7 +59,6 @@ const CheckBoxWrapper = styled.div `
     opacity: ${({ open }) => (open ? '1' : '0')};
     visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
     max-height: ${({ open }) => (open ? '3rem' : '0')};
-    display: flex;
     transition: opacity 0.1s, visibility 0.3s, max-height 0.3s;
     justify-content: space-around;
 `;

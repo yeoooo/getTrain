@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../style/calendar.css'
+import '../../../style/calendar.css'
 import styled from 'styled-components';
 
 function Calendar(props){
