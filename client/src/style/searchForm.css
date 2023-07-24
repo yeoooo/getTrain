@@ -88,26 +88,3 @@ header > p {
     font-size: 1.6rem;
     font-weight: 500;
 }
-
-/* 출발역-도착역 선택 */
-.station-wrap{
-    display: flex;
-    align-items: center;
-    margin: 3rem 0 0 0;
-}
-
-.station-wrap > p{
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0 1.5rem 0 5rem;
-}
-
-.station-wrap > input{
-    appearance: none;
-    border: 1px solid #315A52;
-    border-radius: 1rem;
-    width: 17rem;
-    height: 3.2rem;
-    padding: 0.5rem;
-    background-color: #ffffff;
-}
