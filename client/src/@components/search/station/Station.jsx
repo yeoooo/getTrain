@@ -32,9 +32,14 @@ function Station(props){
 
     // 해당 데이터 클릭 시 입력값 갱신
     const clickDropDownItem = clickedItem => {
-        setInputValue(clickedItem);
+        if(arrivalInputValue !== clickedItem){
+            setInputValue(clickedItem);
         setIsHaveInputValue(false);
         props.handleDepartStationsItem(clickedItem);
+        } else{
+            alert("출발역과 도착역이 같아요!");
+        }
+        
     }
 
     // 입력값이 변할 때 마다 반복해서(hook) 입력값에 해당하는 데이터를 갱신하여 보여준다.
@@ -66,12 +71,17 @@ function Station(props){
     }
 
     const clickArrivalDropDownItem = clickedItem => {
-        setArrivalInputValue(clickedItem);
-        setIsHaveArrivalInputValue(false);
-        props.handleArrivalStationsItem(clickedItem);
+        if(inputValue !== clickedItem){
+            setArrivalInputValue(clickedItem);
+            setIsHaveArrivalInputValue(false);
+            props.handleArrivalStationsItem(clickedItem);
+        } else {
+            alert("출발역과 도착역이 같아요!");
+        }
     }
 
     useEffect(showArrivalDropDownList, [arrivalInputValue]);
+    
     return(
         <StationWrapper open={props.isOpen}>
             <StationInputContainer>
