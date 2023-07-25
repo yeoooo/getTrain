@@ -34,7 +34,7 @@ function Station(props){
     const clickDropDownItem = clickedItem => {
         setInputValue(clickedItem);
         setIsHaveInputValue(false);
-        props.handleSelectedItem(clickedItem);
+        props.handleDepartStationsItem(clickedItem);
     }
 
     // 입력값이 변할 때 마다 반복해서(hook) 입력값에 해당하는 데이터를 갱신하여 보여준다.
@@ -68,11 +68,10 @@ function Station(props){
     const clickArrivalDropDownItem = clickedItem => {
         setArrivalInputValue(clickedItem);
         setIsHaveArrivalInputValue(false);
-        props.handleSelectedItem(clickedItem);
+        props.handleArrivalStationsItem(clickedItem);
     }
 
-    useEffect(showArrivalDropDownList, [arrivalInputValue])
-
+    useEffect(showArrivalDropDownList, [arrivalInputValue]);
     return(
         <StationWrapper open={props.isOpen}>
             <StationInputContainer>
