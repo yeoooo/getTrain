@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../../style/searchForm.css'
 import styled from 'styled-components';
 import InputSection from '../inputSection'
@@ -7,83 +7,115 @@ import InputSection from '../inputSection'
 function StationInputBox(props){
     // 아코디언 감지 (기본은 열려있는 상태)
     const [isOpen, setIsOpen] = useState(true);
-    console.log(isOpen);
-    // 열차 선택 체크박스에서 선택한 항목을 자식 컴포넌트에서 가져오기
-    const [selectedItem, setSelectedItem] = useState(null);
-
-    // 아코디언 토글 (열차 선택 체크박스)
-    const handleSelectedItem = (item) => {
-        setSelectedItem(item);
-        console.log("setIsOpen 상태 변함")
-        handleAccordionToggle();
-    }
-
-    const handleAccordionToggle = () => {
-        setIsOpen((preOpen) => !preOpen);
-        console.log("selectedItem :" + selectedItem);
-    };
 
     // 출발역-도착역 입력값 가져오기
-    const [selectedDepartStations, setSelectedDepartStations] = useState('');
-    const [selectedArrivalStations, setSelectedArrivalStations] = useState('');
+    const [selectedDepartStation, setSelectedDepartStation] = useState('');
+    const [selectedArrivalStation, setSelectedArrivalStation] = useState('');
 
-    const handleStationsItems = (depart, arrival) => {
-        setSelectedDepartStations(depart);
-        setSelectedArrivalStations(arrival);
-        handelStationAccordionToggle();
+    // 출발역 입력값 가져오기
+    const handleDepartStationsItem = (depart) => {
+        setSelectedDepartStation(depart);
     }
 
-    const handelStationAccordionToggle = () => {
+    // 도착역 입력값 가져오기
+    const handleArrivalStationsItem = (arrival) => {
+        setSelectedArrivalStation(arrival);
+    }
+
+    // 아코디언 상태 변경
+    const handleStationAccordionToggle = () => {
         setIsOpen((preOpen) => !preOpen);
     }
 
+    // 화살표 아이콘 클릭 시 아코디언 상태 변경
+    const handleAccordionToggle = () => {
+        setIsOpen((preOpen) => !preOpen);
+    };
+
+    // 변경 감지 후 비동기적 상태 업데이트
+    useEffect(() => {
+        if (selectedDepartStation !== '' && selectedArrivalStation !== '') {
+            handleStationAccordionToggle();
+        }
+    }, [selectedDepartStation, selectedArrivalStation]);
+
     // 기본 상태 (아코디언이 열려있는 상태)
-    if((isOpen && selectedItem === null) || (isOpen && selectedDepartStations === null && selectedArrivalStations === null)){
+    if(isOpen && selectedDepartStation === '' && selectedArrivalStation === ''){
         return(
             <div className='input-warpper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{props.title}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon'/></a>
+                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
+                    <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
             </div>
         );
     } 
-    // 입력값을 넣은 후 아코디언이 접혀져 있는 상태
-    else if((!isOpen && selectedItem !== null) || (!isOpen && selectedDepartStations !== null && selectedArrivalStations !== null) ) {
+    // 출발역 입력값을 넣은 후 아코디언이 아직 펼쳐져 있는 상태 (출발역만 입력한 상태)
+    else if(isOpen && selectedDepartStation !== '' && selectedArrivalStation === '') {
         return(
             <div className='input-warpper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
-                        <h3>{selectedItem}</h3>
+                        {/* <h3>{selectedDepartStations !== null && selectedArrivalStations === null ? `${selectedDepartStations} → ` : ""}</h3> */}
+                        <h3>{selectedDepartStation} → </h3>
+                        {/* {selectedDepartStation !== '' && selectedArrivalStation === '' ? <h3>{selectedStations.depart} → </h3> : <h3>{props.title}</h3>} */}
+
+                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                    </div>
+                    <InputSection title={props.title}  handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
+                </div>
+            </div>
+        );
+    }
+    // 입력값을 넣은 후 아코디언이 접혀져 있는 상태 (출발역 && 도착역 모두 입력한 상태)
+    else if(!isOpen && selectedDepartStation !== '' && selectedArrivalStation !== '') {
+        return(
+            <div className='input-warpper'>
+                <div className='input-box'>
+                    <div className='input-box-header'>
+                        <img src={props.icon} className='train-icon' alt='icon'/>
+                        <h3>{selectedDepartStation} → {selectedArrivalStation}</h3>
                         <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                     </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
+                    <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
             </div>
         );
     }
     // 입력 후 아코디언을 여는 상태
-    else if((isOpen && selectedItem !== null) || isOpen && selectedDepartStations !== null && selectedArrivalStations !== null){
+    else if(isOpen && selectedDepartStation !== '' && selectedArrivalStation !== ''){
         return(
             <div className='input-warpper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
-                        <h3>{selectedItem}</h3>
+                        <h3>{selectedDepartStation} → {selectedArrivalStation}</h3>
                         <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
+                    <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
             </div>
         );
     }
-    
-    
+    else{// 기본 상태 (아코디언이 열려있는 상태)
+        return(
+            <div className='input-warpper'>
+                <div className='input-box'>
+                    <div className='input-box-header'>
+                        <img src={props.icon} className='train-icon' alt='icon'/>
+                        <h3>{props.title}</h3>
+                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                    </div>
+                    <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default StationInputBox
