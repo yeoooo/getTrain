@@ -1,12 +1,77 @@
 import React, { useState } from 'react';
 import '../../../style/calendar.css'
 import styled from 'styled-components';
+import { format, addMonths, subMonths } from 'date-fns';
+import { isSameDay, isSameMonth, addDays, parse } from 'date-fns';
+import { startOfMonth, endOfMonth ,startOfWeek, endOfWeek } from 'date-fns';
+
+const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
+    return(
+        <div >
+            <div>
+                {format(currentMonth, 'M')}월
+                {format(currentMonth, 'yyyy')}
+            </div>
+            {/* 이전 다음달 아이콘 */}
+            <div>
+
+            </div>
+            
+        </div>
+    )
+}
+
+// 달력의 날짜 출력
+const RenderDate = ({ currentMonth, selectedDate, onClickDate }) => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
+    const rows = [];
+    let days = [];
+    let day = startDate;
+    let formattedDate = '';
+
+    while (day <= endDate){
+        for(let i = 0; i < 7; i++){
+            formattedDate = format(day, 'd');
+            const copyDay = day;
+            days.push(
+                <div className={`col cell ${ !isSameMonth(day, monthStart)
+                        ? 'disabled'
+                        : isSameDay(day, selectedDate)
+                        ? 'selected'
+                        : format(currentMonth, 'M') !== format(day, 'M')
+                        ? 'non-valid' 
+                        : 'valid'
+                    }`}
+                    key={day}
+                    onClick={() => onClickDate(parse(copyDay))}
+                >
+                    <span className={ format(currentMonth, 'M') !== format(day, 'M')
+                                    ? 'text not-valid' : ''
+                    }>
+                        {formattedDate}
+                    </span>
+                </div>,
+            );
+            day = addDays(day, 1);
+        }
+        rows.push(
+            <div className='row' key={day}>
+                {days}
+            </div>
+        );
+        days = [];
+    }
+    return <div className='date-box'>{rows}</div>;
+};
 
 function Calendar(props){
-    // 첫 화면은 현재 날짜를 선택하고 있음
-    const current = new Date();
-    const nowDate = `${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`;
-    const nowMonth = `${current.getMonth()+1}`;
+    // 기본화면은 현재 날짜를 선택
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    
     // 달력의 요일 출력
     const DAYS_LIST = [
         {id: 0, data: 'SUN'},
@@ -17,18 +82,30 @@ function Calendar(props){
         {id: 5, data: 'FRI'},
         {id: 6, data: 'SAT'},
     ];
-    // 달력의 날짜 출력
-    function DateCount(){
-        var thirty_first = [];
-        for(var i=0; i<31; i++){
-            thirty_first.push(i+1);
-        }
-        return thirty_first
-    }
+
+
+    // 다음 달로 이동
+    const prevMonth= () => {
+        setCurrentMonth(subMonths(currentMonth, 1));
+    };
+
+    // 이전 달로 이동
+    const nextMonth = () => {
+        setCurrentMonth(addMonths(currentMonth, 1));
+    };
+
+    // 날짜 선택
+    const onClickDate = (date) => {
+        setSelectedDate(date);
+    };
 
     return(
         <div className='calendar-wrapper'>
-            <p>{nowMonth}월</p>
+            {/* 달 */}
+            <RenderMonth currentMonth={currentMonth}
+                         prevMonth={prevMonth}
+                         nextMonth={nextMonth}
+            />
 
             {/* 달력 */}
             <div className='calendar-box'>
@@ -38,13 +115,13 @@ function Calendar(props){
                         <p>{DAYS_LIST.data}</p>
                     ))}
                 </div>
-                {/* 날짜 */}
-                {/* 위에 나타내는 월을 감지하여 30일/31일 출력하기 */}
-                <div className='date-box'>
-                    {DateCount().map((date) => (
-                        <a href='#'><p key={date}>{date}</p></a>
-                    ))}
-                </div>
+                {/* 날짜 */}                
+                <RenderDate currentMonth={currentMonth}
+                            selectedDate={selectedDate}
+                            onClickDate={onClickDate}
+                />
+                
+                
                 
             </div>
         </div>

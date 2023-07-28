@@ -251,4 +251,8 @@ export const STATION_DATA = [
         id: 62,
         data: "충주",
     },
+    {
+        id: 63,
+        data: "서대전",
+    },
 ]
