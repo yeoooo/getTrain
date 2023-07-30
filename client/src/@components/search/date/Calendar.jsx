@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import '../../../style/calendar.css'
 import styled from 'styled-components';
-import { format, addMonths, subMonths } from 'date-fns';
-import { isSameDay, isSameMonth, addDays, parse } from 'date-fns';
-import { startOfMonth, endOfMonth ,startOfWeek, endOfWeek } from 'date-fns';
+import { format, addMonths, subMonths, 
+         isSameDay, isSameMonth, addDays, 
+         parse, startOfMonth, endOfMonth , 
+         startOfWeek, endOfWeek, isBefore } from 'date-fns';
 
 const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
     return(
         <div >
-            <div>
-                {format(currentMonth, 'M')}월
-                {format(currentMonth, 'yyyy')}
-            </div>
             {/* 이전 다음달 아이콘 */}
-            <div>
-
+            <div className='month-header'>
+                <img src='../../src/assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
+                <div className='month'>
+                    <span> {format(currentMonth, 'M')}월 </span>
+                    {format(currentMonth, 'yyyy')}
+                </div>
+                <img src='../../src/assets/calendar_arrow.png' onClick={nextMonth} style={{margin: '0 0 1.3rem 0'}}/>
             </div>
-            
         </div>
     )
 }
@@ -28,32 +29,41 @@ const RenderDate = ({ currentMonth, selectedDate, onClickDate }) => {
     const startDate = startOfWeek(monthStart);
     const endDate = endOfWeek(monthEnd);
     const rows = [];
+    const today = new Date(); // 오늘 날짜 할당
     let days = [];
     let day = startDate;
     let formattedDate = '';
 
     while (day <= endDate){
         for(let i = 0; i < 7; i++){
+            // 1 ~ 31 숫자로 포맷
             formattedDate = format(day, 'd');
             const copyDay = day;
+
             days.push(
-                <div className={`col cell ${ !isSameMonth(day, monthStart)
-                        ? 'disabled'
-                        : isSameDay(day, selectedDate)
-                        ? 'selected'
-                        : format(currentMonth, 'M') !== format(day, 'M')
-                        ? 'non-valid' 
+                <div className={`col ${ 
+                        !isSameMonth(day, monthStart) ? 'disabled'
+                        : isSameDay(day, selectedDate) ? 'selected'
+                        // 오늘 날짜 기준 이전 날짜는 선택할 수 없음 
+                        : isBefore(day, today) ? 'not-valid'
+                        : format(currentMonth, 'M') !== format(day, 'M') ? 'non-valid' 
                         : 'valid'
                     }`}
                     key={day}
-                    onClick={() => onClickDate(parse(copyDay))}
+                    onClick={() => {
+                        onClickDate(parse(copyDay, 'yyyy-MM-dd', new Date()));
+                        console.log("clicked")
+                        console.log(copyDay);
+                      }}
                 >
                     <span className={ format(currentMonth, 'M') !== format(day, 'M')
                                     ? 'text not-valid' : ''
                     }>
-                        {formattedDate}
+                    {/* 각 날짜 표시 */}
+                    {formattedDate}
                     </span>
                 </div>,
+                
             );
             day = addDays(day, 1);
         }

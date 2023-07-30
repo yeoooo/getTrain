@@ -14,7 +14,8 @@
 .calendar-box{
     background-color: #ffffff;
     width: 40rem;
-    height: 35rem;
+    height: 100%;
+    padding: 1.5rem 0.5rem 2.5rem 0.5rem;
     border: 1.3px solid #aec2b0;
     border-radius: 0.5rem;
 }
@@ -24,7 +25,7 @@
     justify-content: space-around;
     font-size: 1.3rem;
     font-weight: 700;
-    margin: 1.5rem 0 0 0;
+    margin: 1.5rem  0;
 }
 
 .date-box{
@@ -47,13 +48,46 @@
     margin: 1.5rem 1.5rem;
     font-size: 1.3rem;
     width: 2.5rem;
-    height: 2rem;
+    height: 2.3rem;
 }
 
-.col > span{
-    margin: 1rem 0 0 1rem;
+.valid :hover {
+    transform: scale(1.01);
+    color: #aec2b0;
 }
 
-.col > .not-valid {
+.not-valid {
     color: #b7b7b7;
+}
+
+.selected {
+    transform: scale(1.02);
+    background-color: #aec2b0;
+    border-radius: 10rem;
+    padding: 1.5rem;
+    color: #ffffff;
+}
+
+.month-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.month-header > img {
+    width: 1.5rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.month {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 0 10rem 1.5rem 10rem;
+}
+
+.month > span {
+    font-size: 3rem;
+    font-weight: 600;
+    margin: 0 1.5rem;
 }
