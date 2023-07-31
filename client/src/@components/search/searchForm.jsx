@@ -3,6 +3,7 @@ import '../../style/searchForm.css'
 import TrainTypeInputBox from './trainType/trainTypeInputBox'
 import StationInputBox from './station/stationInputBox'
 import DateInputBox from './date/dateInpuBox'
+import styled from 'styled-components';
 
 function SearchForm(props){
     // 입력값 받아오기
@@ -52,10 +53,34 @@ function SearchForm(props){
                     handleSelectedItem={setSelectedDate}/>
             </section>
 
-            <button onClick={handleSearch}>조회</button>
+            <SearchButton >
+                <button onClick={handleSearch}><span>조회하기</span></button>
+            </SearchButton>
             
         </div>
     );
 }
+
+const SearchButton = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 10rem 0;
+
+    button{
+        padding: 2rem 12rem;
+        background-color: #315A52;
+        border: none;
+        
+        &:hover{
+            background-color: #094337;
+        }
+        span{
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+    }
+
+`
 
 export default SearchForm
