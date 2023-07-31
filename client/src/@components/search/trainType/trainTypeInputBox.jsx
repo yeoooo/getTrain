@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import '../../../style/searchForm.css'
-import styled from 'styled-components';
 import InputSection from '../inputSection'
 
 
