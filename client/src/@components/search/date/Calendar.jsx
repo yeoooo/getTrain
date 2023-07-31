@@ -49,12 +49,6 @@ const RenderDate = ({ currentMonth, selectedDate, onClickDate }) => {
                         : 'valid'
                     }`}
                     key={day}
-                    // onClick={() => {
-                    //     onClickDate(parse(copyDay, 'yyyy-MM-dd', new Date()));
-                    //     console.log("clicked")
-                    //     console.log("copyDay", copyDay);
-                    //     console.log("selectedDate", selectedDate);
-                    //   }}
                     onClick={() => onClickDate(copyDay)}
                 >
                     <span className={ format(currentMonth, 'M') !== format(day, 'M')
@@ -111,12 +105,12 @@ function Calendar(props){
         const formattedDay = format(date, 'yyyy-MM-dd');
         const parsedDay = parse(formattedDay, 'yyyy-MM-dd', new Date());
         setSelectedDate(parsedDay);
-        console.log("onClickDate", selectedDate);
+        props.handleSelectedItem(parsedDay);
     };
 
 
     return(
-        <div className='calendar-wrapper'>
+        <CalendarWrapper className='calendar-wrapper' open={props.isOpen}>
             {/* 달 */}
             <RenderMonth currentMonth={currentMonth}
                          prevMonth={prevMonth}
@@ -138,8 +132,15 @@ function Calendar(props){
                 />
                 <p>선택 날짜: {format(selectedDate, 'yyyy-dd-MM')}</p>
             </div>
-        </div>
+        </CalendarWrapper>
     );
 }
+
+const CalendarWrapper = styled.div`
+    opacity: ${({ open }) => (open ? '1' : '0')};
+    visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+    max-height: ${({ open }) => (open ? '60rem' : '0')};
+    transition: opacity 0.1s, visibility 0.3s, max-height 0.7s;
+`
 
 export default Calendar

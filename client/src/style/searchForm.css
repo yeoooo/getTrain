@@ -68,6 +68,7 @@ header > p {
 .checkBox-wrap > input {
     appearance: none;
     border-color: #ffffff;
+    background-color: #ffffff;
     border: 1.5px solid gainsboro;
     border-radius: 0.35rem;
     width: 1.5rem;
