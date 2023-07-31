@@ -60,9 +60,17 @@
     color: #b7b7b7;
 }
 
+.col.selected {
+    transform: scale(1.02);
+    background-color: #4b764f;
+    border-radius: 10rem;
+    padding: 1.5rem;
+    color: #ffffff;
+}
+
 .selected {
     transform: scale(1.02);
-    background-color: #aec2b0;
+    background-color: #4b764f;
     border-radius: 10rem;
     padding: 1.5rem;
     color: #ffffff;
