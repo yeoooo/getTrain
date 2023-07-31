@@ -43,18 +43,19 @@ const RenderDate = ({ currentMonth, selectedDate, onClickDate }) => {
             days.push(
                 <div className={`col ${ 
                         !isSameMonth(day, monthStart) ? 'disabled'
-                        : isSameDay(day, selectedDate) ? 'selected'
-                        // 오늘 날짜 기준 이전 날짜는 선택할 수 없음 
-                        : isBefore(day, today) ? 'not-valid'
+                        : isSameDay(day, selectedDate) ? 'selected' // 현재 날짜 표시 
+                        : isBefore(day, today) ? 'not-valid' // 오늘 날짜 기준 이전 날짜는 선택할 수 없음
                         : format(currentMonth, 'M') !== format(day, 'M') ? 'non-valid' 
                         : 'valid'
                     }`}
                     key={day}
-                    onClick={() => {
-                        onClickDate(parse(copyDay, 'yyyy-MM-dd', new Date()));
-                        console.log("clicked")
-                        console.log(copyDay);
-                      }}
+                    // onClick={() => {
+                    //     onClickDate(parse(copyDay, 'yyyy-MM-dd', new Date()));
+                    //     console.log("clicked")
+                    //     console.log("copyDay", copyDay);
+                    //     console.log("selectedDate", selectedDate);
+                    //   }}
+                    onClick={() => onClickDate(copyDay)}
                 >
                     <span className={ format(currentMonth, 'M') !== format(day, 'M')
                                     ? 'text not-valid' : ''
@@ -76,6 +77,7 @@ const RenderDate = ({ currentMonth, selectedDate, onClickDate }) => {
     }
     return <div className='date-box'>{rows}</div>;
 };
+
 
 function Calendar(props){
     // 기본화면은 현재 날짜를 선택
@@ -106,8 +108,12 @@ function Calendar(props){
 
     // 날짜 선택
     const onClickDate = (date) => {
-        setSelectedDate(date);
+        const formattedDay = format(date, 'yyyy-MM-dd');
+        const parsedDay = parse(formattedDay, 'yyyy-MM-dd', new Date());
+        setSelectedDate(parsedDay);
+        console.log("onClickDate", selectedDate);
     };
+
 
     return(
         <div className='calendar-wrapper'>
@@ -130,9 +136,7 @@ function Calendar(props){
                             selectedDate={selectedDate}
                             onClickDate={onClickDate}
                 />
-                
-                
-                
+                <p>선택 날짜: {format(selectedDate, 'yyyy-dd-MM')}</p>
             </div>
         </div>
     );
