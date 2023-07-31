@@ -16,6 +16,7 @@ function DateInputBox(props){
     const handleSelectedItem = (item) => {
         setSelectedItem(item);
         handleAccordionToggle();
+        props.handleSelectedItem(item);
     }
 
     // 화살표 아이콘 클릭 시 아코디언 상태 변경

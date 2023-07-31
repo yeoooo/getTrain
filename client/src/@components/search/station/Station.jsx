@@ -224,6 +224,7 @@ const DropDownItem = styled.li`
   &.selected {
     background-color: #eaeaea;
     border-radius: 0.3rem;
+    color: #000000;
   }
 `
 export default Station

@@ -15,11 +15,13 @@ function StationInputBox(props){
     // 출발역 입력값 가져오기
     const handleDepartStationsItem = (depart) => {
         setSelectedDepartStation(depart);
+        props.handleDepartStationsItem(depart);
     }
 
     // 도착역 입력값 가져오기
     const handleArrivalStationsItem = (arrival) => {
         setSelectedArrivalStation(arrival);
+        props.handleArrivalStationsItem(arrival);
     }
 
     // 아코디언 상태 변경
