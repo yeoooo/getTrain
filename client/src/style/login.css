@@ -38,22 +38,11 @@
 
 .login-input > div > input{
     border-bottom: 1px solid #315A52;
-    padding: 0 0 0 2rem;
     width: 20rem;
 }
 
 .login-input > div > img{
     border-bottom: 1px solid #315A52;
-    width: 25px;
-    height: 25px;
-}
-
-.login-input > button{
-    background-color: #315A52;
-    padding: 0.7rem 2rem;
-    margin: 5rem 0 0 0;
-    color: #FFFFFF;
-    font-size: 1.3rem;
 }
 
 .logo-img{
