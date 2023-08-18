@@ -130,7 +130,7 @@ function LoginCard(props){
                         type='password' 
                         name='password' 
                         placeholder='비밀번호를 입력해주세요'
-                        value={password}
+                        value={pw}
                         required
                         onChange={handlePasswordChange}/>
                 </div>
