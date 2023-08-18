@@ -31,7 +31,7 @@ function SearchForm(props){
     }
 
     return(
-        <div>
+        <SearchFormWrapper>
             <header>
                 <h1>열차 정보 조회</h1>
                 <p>찾으실 열차 정보를 입력해주세요.</p>
@@ -57,9 +57,11 @@ function SearchForm(props){
                 <button onClick={handleSearch}><span>조회하기</span></button>
             </SearchButton>
             
-        </div>
+        </SearchFormWrapper>
     );
 }
+
+const SearchFormWrapper = styled.div``
 
 const SearchButton = styled.div`
     display: flex;

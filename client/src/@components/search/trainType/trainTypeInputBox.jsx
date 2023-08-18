@@ -9,7 +9,7 @@ function TrainTypeInputBox(props){
     // console.log(isOpen);
     // 열차 선택 체크박스에서 선택한 항목을 자식 컴포넌트에서 가져오기
     const [selectedItem, setSelectedItem] = useState(null);
-
+    
     // 아코디언 토글 (열차 선택 체크박스)
     const handleSelectedItem = (item) => {
         setSelectedItem(item);

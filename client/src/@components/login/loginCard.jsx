@@ -6,8 +6,9 @@ import { styled } from 'styled-components';
 
 function LoginCard(props){
     const [type, setType] = useState('');
-    const [id, setID] = useState('');
-    const [password, setPassword] = useState('');
+    const [id, setId] = useState('');
+    const [pw, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
     // 로그인 타입
@@ -18,12 +19,17 @@ function LoginCard(props){
 
     // ID
     const handleIdChange = (event) => {
-        setID(event.target.value);
+        setId(event.target.value);
     }
 
     // 비밀번호
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
+    }
+
+    // 알림 이메일
+    const handleNoticeEmailChange = (event) => {
+        setEmail(event.target.value);
     }
 
     const handleLogIn = async (event) => {
@@ -33,7 +39,7 @@ function LoginCard(props){
             const response = await fetch('/api/v1/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type, id, password }),
+                body: JSON.stringify({ user: { type, id, pw, email } }),
             });
 
             if (response.status === 200) {
@@ -61,17 +67,17 @@ function LoginCard(props){
             
 
             <TabMenuWrapper className='tab-menu'>
-                <a href='#' onClick={() => handleTypeChange('membership')}>멤버십번호 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('email')}>이메일 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('phone')}>휴대번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')}>멤버십번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('EMAIL_LOGIN')}>이메일 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('PHONE_NUMBER_LOGIN')}>휴대번호 로그인</a>
             </TabMenuWrapper>
 
             <form onSubmit={handleLogIn} className='login-input'>
                 <LoginInputBox>
-                    {type === 'membership' && (
+                    {type === 'MEMBERSHIP_LOGIN' && (
                         <>
                             <MemberIcon src='../../src/assets/member.png' alt='Membership icon' width={15} height={15}/>
-                            <LoginInput 
+                            <MemberLoginInput 
                                 type='text' 
                                 name='membership' 
                                 placeholder='멤버십 번호를 입력해주세요'
@@ -80,10 +86,10 @@ function LoginCard(props){
                                 onChange={handleIdChange} />
                         </>
                     )}
-                    {type === 'email' && (
+                    {type === 'EMAIL_LOGIN' && (
                         <>
                             <EmailIcon src='../../src/assets/email.png' alt='Email icon' />
-                            <LoginInput 
+                            <EmailLoginInput 
                                 type='email' 
                                 name='email' 
                                 placeholder='이메일을 입력해주세요'
@@ -92,7 +98,7 @@ function LoginCard(props){
                                 onChange={handleIdChange} />
                         </>
                     )}
-                    {type === 'phone' && (
+                    {type === 'PHONE_NUMBER_LOGIN' && (
                         <>
                             <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon'/>
                             <LoginInput 
@@ -116,8 +122,6 @@ function LoginCard(props){
                                 onChange={handleIdChange} />
                         </>
                     )}
-                    
-                    
                 </LoginInputBox>
                 
                 <div>
@@ -129,6 +133,17 @@ function LoginCard(props){
                         value={password}
                         required
                         onChange={handlePasswordChange}/>
+                </div>
+
+                <div>
+                    <NoticeEmailIcon src='../../src/assets/notice-email.png' alt='Lock icon'/>
+                    <NoticeEmailInput 
+                        type='email' 
+                        name='email' 
+                        placeholder='알림을 받으실 이메일을 입력해주세요'
+                        value={email}
+                        required
+                        onChange={handleNoticeEmailChange}/>
                 </div>
                 
                 <LoginButton 
@@ -156,13 +171,13 @@ const LoginInputBox = styled.div``
 const MemberIcon = styled.img`
     width: 21px;
     height: 22px;
-    padding: 0 0 2px 3px;   
+    padding: 0 0 2px 4px;   
 `
 
 const EmailIcon = styled.img`
     width: 23px;
     height: 24px;
-    padding: 0 0 6px 3px;   
+    padding: 0 0 6px 4px;   
     margin: 5px 0 0 0;
 `
 
@@ -172,9 +187,27 @@ const PhoneIcon = styled.img`
     padding: 0 0 2px 3px;   
 `
 
+const NoticeEmailIcon  = styled.img`
+    width: 23px;
+    height: 21px;
+    padding: 0 0 2px 3px;  
+    margin: 5px 0 0 3px;
+`
+
 const LoginInput = styled.input`
     padding: 0 0 0.5rem 2rem;
-    width: 20rem;
+`
+
+const MemberLoginInput = styled.input`
+    padding: 0 0 0.5rem 2.8rem;
+`
+
+const EmailLoginInput = styled.input`
+    padding: 0 0 0.5rem 2.5rem;
+`
+
+const NoticeEmailInput = styled.input`
+    padding: 0 0 0.5rem 2.5rem;
 `
 
 const LoginButton = styled.button`
