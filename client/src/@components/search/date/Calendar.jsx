@@ -102,10 +102,11 @@ function Calendar(props){
 
     // 날짜 선택
     const onClickDate = (date) => {
-        const formattedDay = format(date, 'yyyy-MM-dd');
-        const parsedDay = parse(formattedDay, 'yyyy-MM-dd', new Date());
+        const formattedDay = format(date, 'yyyyMMddHHmmss');
+        const parsedDay = parse(formattedDay, 'yyyyMMddHHmmss', new Date());
         setSelectedDate(parsedDay);
         props.handleSelectedItem(parsedDay);
+        // console.log(formattedDay);
     };
 
 
@@ -130,7 +131,6 @@ function Calendar(props){
                             selectedDate={selectedDate}
                             onClickDate={onClickDate}
                 />
-                <p>선택 날짜: {format(selectedDate, 'yyyy-dd-MM')}</p>
             </div>
         </CalendarWrapper>
     );

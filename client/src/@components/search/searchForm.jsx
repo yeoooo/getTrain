@@ -4,17 +4,28 @@ import TrainTypeInputBox from './trainType/trainTypeInputBox'
 import StationInputBox from './station/stationInputBox'
 import DateInputBox from './date/dateInpuBox'
 import styled from 'styled-components';
+import { parseISO, format, setHours, setMinutes } from 'date-fns';
 
-function SearchForm(props){
+function SearchForm(){
     // 입력값 받아오기
     const [trainType, setTrainType] = useState(null);
     const [departStation, setDepartStation] = useState(null);
     const [arrivalStation, setArrivalStation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
 
+    // 선택 날짜 포맷
+    const DatetoString = new Date(selectedDate).toISOString();
+    const parsedDate = parseISO(DatetoString, 'yyyyMMddHHmmss');
+    // 출발일: 00시로 할당 ('20230822000000' 형식)
+    const timeFrom = format(parsedDate, 'yyyyMMddHHmmss');
+    // 조회하는 탐색 열차 시간을 해당 날짜 23시 59분까지 탐색 ('20230822235900' 형식)
+    const parsedTimeUtil = setHours(parsedDate, 23);
+    const parsedTimeUtilMinutes = setMinutes(parsedTimeUtil, 59);
+    const timeUtil = format(parsedTimeUtilMinutes, 'yyyyMMddHHmmss');
+    // console.log(timeUtil);
 
     // 조회 버튼 클릭 시 입력값 유효성 검사
-    const handleSearch = () => {
+    const handleSearch = async (event) => {
         if( !trainType ) {
             window.alert('열차 종류를 선택해주세요!');
         } else if(!departStation){
@@ -25,9 +36,34 @@ function SearchForm(props){
             window.alert('출발 날짜를 선택해주세요!');
         } else{
             // 조회 요청
-            window.alert('조회 요청!!');
+            window.alert('조회를 실행하겠습니다 :)');
         }
-        console.log(trainType);
+        
+        event.preventDefault();
+
+        
+        try {
+            const response = await fetch('/api/v1/reserve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    data: {
+                        req: {
+                            trainType: trainType,
+                            from: departStation,
+                            to: arrivalStation,
+                            time_from: timeFrom,
+                            time_until: timeUtil,
+                        }
+                    } 
+                }),
+
+
+            });
+        } catch(error){
+            console.log(error.message);
+        }
+        
     }
 
     return(

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import '../../style/login.css'
 import { styled } from 'styled-components';
 
-function LoginCard(props){
+function LoginCard(){
     const [type, setType] = useState('');
     const [id, setId] = useState('');
     const [pw, setPassword] = useState('');
@@ -39,7 +38,16 @@ function LoginCard(props){
             const response = await fetch('/api/v1/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: { type, id, pw, email } }),
+                body: JSON.stringify({ 
+                    data: {
+                        user: {
+                            type: type,
+                            id: id,
+                            pw: pw,
+                            email: email
+                        }
+                    }
+                }),            
             });
 
             if (response.status === 200) {
