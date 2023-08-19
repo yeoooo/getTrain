@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 function DateInputBox(props){
     // 아코디언 감지 (기본은 열려있는 상태)
     const [isOpen, setIsOpen] = useState(true);
-    console.log(isOpen);
     // 달력에서 선택한 날짜를 자식 컴포넌트에서 가져오기
     const [selectedItem, setSelectedItem] = useState(null);
 
