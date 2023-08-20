@@ -8,7 +8,7 @@ function SearchingPage(){
 
         try {
             const response = await fetch('api/v1/reserve/stop', {
-                method: 'POST',
+                method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ email }),
             });
