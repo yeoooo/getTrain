@@ -3,6 +3,7 @@ import { GlobalStyle } from "./style/globalStyle";
 import { theme } from "./style/theme";
 import LoginPage from "./@pages/LoginPage";
 import SearchFormPage from "./@pages/SearchFormPage";
+import SearchingPage from "./@pages/SearchingPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/search" element={<SearchFormPage />} />
+            <Route path="/searching" element={<SearchingPage/>} />
           </Routes>
         </Router>
       </ThemeProvider>
