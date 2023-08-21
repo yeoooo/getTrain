@@ -14,7 +14,7 @@ function CheckBox(props){
     ];
 
     // 선택값이 들어갈 빈 배열
-    const [checkItem, setCheckedItem] = useState(null); 
+    const [checkItem, setCheckedItem] = useState(''); 
 
     // 단일 선택
     const onCheckedElement = (id) => {
@@ -23,13 +23,16 @@ function CheckBox(props){
         } else {
             setCheckedItem(id);
             const selectedItemData = CATEGORY_LIST.find(item => item.id === id)?.data;
+            // const selectedItemData = 
+            //     id === 0 ? 'TOTAL' :
+            //     id === 1 ? 'KTX' :
+            //     id === 2 ? 'ITX' :
+            //     id === 3 ? 'MUGUNGHWA' :
+            //     CATEGORY_LIST.find(item => item.id === id)?.data;
             props.handleSelectedItem(selectedItemData);
             console.log(selectedItemData);
         }
     }
-
-    // 선택된 항목 출력
-    const selectedItem = checkItem !== null ? CATEGORY_LIST.find((item) => item.id === checkItem)?.data : '';
 
     return(
         <CheckBoxWrapper open={props.isOpen}>
