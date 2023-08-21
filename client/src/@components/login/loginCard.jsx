@@ -51,13 +51,11 @@ function LoginCard(){
             });
 
             if (response.status === 200) {
-                // 추후 추가 코드 작성 예정
-
+                sessionStorage.setItem("email", email);
                 window.alert("로그인이 되었습니다!"); 
                 navigate('/search');  
 
             } else if (response.status === 404) {
-                // Handle other status codes if needed
                 window.alert("등록되어 있지 않은 아이디 및 비밀번호입니다 :(");
             } else {
                 window.alert("로그인 실패");
@@ -156,7 +154,7 @@ function LoginCard(){
                 
                 <LoginButton 
                     type='submit'
-                    disabled={!(id && password)}> 
+                    disabled={!(id && pw)}> 
                 LOGIN</LoginButton>
             </form>
         </LoginInputWrapper> 
