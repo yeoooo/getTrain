@@ -4,9 +4,10 @@ import { styled } from 'styled-components';
 
 function SearchingPage(){
     const handleStopButton = async () => {
-        const email = 'user@gamil.com';
-
+        // console.log(email);
+        window.alert("조회 중단을 실행하겠습니다.");
         try {
+            const email = sessionStorage.getItem('email');
             const response = await fetch('api/v1/reserve/stop', {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
