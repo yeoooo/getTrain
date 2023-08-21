@@ -5,6 +5,7 @@ import StationInputBox from './station/stationInputBox'
 import DateInputBox from './date/dateInpuBox'
 import styled from 'styled-components';
 import { parseISO, format, setHours, setMinutes } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 function SearchForm(){
     // 입력값 받아오기
@@ -12,6 +13,7 @@ function SearchForm(){
     const [departStation, setDepartStation] = useState(null);
     const [arrivalStation, setArrivalStation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
+    const navigate = useNavigate();
 
     // 선택 날짜 포맷
     const DatetoString = new Date(selectedDate).toISOString();
@@ -22,7 +24,8 @@ function SearchForm(){
     const parsedTimeUtil = setHours(parsedDate, 23);
     const parsedTimeUtilMinutes = setMinutes(parsedTimeUtil, 59);
     const timeUtil = format(parsedTimeUtilMinutes, 'yyyyMMddHHmmss');
-    // console.log(timeUtil);
+    
+    
 
     // 조회 버튼 클릭 시 입력값 유효성 검사
     const handleSearch = async (event) => {
@@ -38,6 +41,22 @@ function SearchForm(){
             // 조회 요청
             window.alert('조회를 실행하겠습니다 :)');
         }
+
+        // 열차 타입 재할당
+        if (trainType === '전체') {
+            setTrainType('ALL');
+        } else if (trainType === 'KTX/SRT') {
+            setTrainType('KTX');
+        } else if (trainType === 'ITX-청춘') {
+            setTrainType('ITX');
+        } else if (trainType === '새마을ITX-새마을') {
+            setTrainType('ITX');
+        } else if (trainType === '무궁화/누리로') {
+            setTrainType('MUGUNGHWA');
+        } else {
+            console.log(trainType);
+        }
+        // console.log(trainType);
         
         event.preventDefault();
 
@@ -57,9 +76,14 @@ function SearchForm(){
                         }
                     } 
                 }),
-
-
             });
+            if (response.status === 200) {
+                // 추후 추가 코드 작성 예정
+                navigate('/searching');  
+
+            } else {
+                window.alert("조회가 불가능 합니다.");
+            }
         } catch(error){
             console.log(error.message);
         }
