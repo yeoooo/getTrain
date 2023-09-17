@@ -40,11 +40,16 @@ public class TrainService implements InitializingBean,DisposableBean {
     @Setter
     private boolean stop;
 
+    public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
+    public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver";
+
 
     public TrainService(String ip, String email, MailUtil mailUtil){
+        System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
         this.options = new ChromeOptions();
-        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
-        this.driver = new ChromeDriver(options);
+//        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
+
+        this.driver = new ChromeDriver();
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
@@ -275,7 +280,7 @@ public class TrainService implements InitializingBean,DisposableBean {
      */
     public void logout() {
         driver.get("https://www.letskorail.com/ebizprd/prdMain.do");
-        WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(2);
+        WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(3);
         WebElement aElement = logout_li.findElement(By.tagName("a"));
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
