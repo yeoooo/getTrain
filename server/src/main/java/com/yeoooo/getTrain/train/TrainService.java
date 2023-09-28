@@ -47,7 +47,7 @@ public class TrainService implements InitializingBean,DisposableBean {
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
         this.options = new ChromeOptions();
-//        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
+        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
 
         this.driver = new ChromeDriver();
         this.ip = ip;
@@ -69,6 +69,20 @@ public class TrainService implements InitializingBean,DisposableBean {
 
         ArrayList<Train> trains = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Map<String, Integer> calendar = new HashMap<>(){{
+           put("JANUARY", 1);
+           put("FEBRUARY", 2);
+           put("MARCH", 3);
+           put("APRIL", 4);
+           put("MAY", 5);
+           put("JUNE", 6);
+           put("JULY", 7);
+           put("AUGUST", 8);
+           put("SEPTEMBER", 9);
+           put("OCTOBER", 10);
+           put("NOVEMBER", 11);
+           put("DECEMBER", 12);
+        }};
 
 		driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
 
@@ -95,14 +109,14 @@ public class TrainService implements InitializingBean,DisposableBean {
         input_get.sendKeys(to);
 
         input_sYear.sendKeys(String.valueOf(range_from.getYear()));
-        input_sMonth.sendKeys(String.valueOf(range_from.getMonth()));
+        input_sMonth.sendKeys(calendar.get(String.valueOf(range_from.getMonth())).toString());
         input_sDay.sendKeys(String.valueOf(range_from.getDayOfMonth()));
         input_sHour.sendKeys(String.valueOf(range_from.getHour()));
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofMinutes(30));
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("tableResult")));
 
         WebElement tableResult = driver.findElement(By.id("tableResult"));
