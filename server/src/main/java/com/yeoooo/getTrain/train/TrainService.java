@@ -29,7 +29,9 @@ import java.util.*;
 @Slf4j
 public class TrainService implements InitializingBean,DisposableBean {
 
-    private ChromeOptions options;
+    private ChromeOptions options = new ChromeOptions(){{
+        addArguments("--headless=new");
+    }};
     private WebDriver driver;
     private String email;
     private String ip;
@@ -46,10 +48,8 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-        this.options = new ChromeOptions();
-        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
 
-        this.driver = new ChromeDriver();
+        this.driver = new ChromeDriver(options);
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
