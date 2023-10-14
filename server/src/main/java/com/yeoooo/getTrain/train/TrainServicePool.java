@@ -21,8 +21,8 @@ import java.util.Map;
 public class TrainServicePool {
 
     private final MailUtil mailUtil;
-//    private final long MAX_IDLE_TIME_IN_SECONDS = 1800; //sec , 30분 후 인스턴스 파기
-    private final long MAX_IDLE_TIME_IN_SECONDS = 20; //디버깅용 20초 후 인스턴스 파기
+    private final long MAX_IDLE_TIME_IN_SECONDS = 7200; //sec , 30분 후 인스턴스 파기
+//    private final long MAX_IDLE_TIME_IN_SECONDS = 20; //디버깅용 20초 후 인스턴스 파기
 
     @Getter
     private static Map<String, TrainService> pool = new HashMap<>();
@@ -45,11 +45,11 @@ public class TrainServicePool {
         service.setStop(false);
         service.logout();
         log.info("[TrainServicePool] {} [driver] 로그아웃.", email);
-        log.info("[TrainServicePool] {} [driver] 종료.", email);
         service.quit();
         service.destroy();
-        log.info("[TrainServicePool] {} [service] 파기.", email);
+        log.info("[TrainServicePool] {} [driver] 종료.", email);
         pool.remove(email);
+        log.info("[TrainServicePool] {} [service] 파기.", email);
     }
 
     /**
@@ -61,6 +61,7 @@ public class TrainServicePool {
     public void checkIdleTrainServices() {
         log.info("[TrainServicePool] : {}", pool);
         Iterator<Map.Entry<String, TrainService>> iterator = pool.entrySet().iterator();
+        log.info("[TrainServicePool] : {}", pool);
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         while (iterator.hasNext()) {
@@ -70,11 +71,12 @@ public class TrainServicePool {
             Duration idleDuration = Duration.between(lastRequestTime, currentDateTime);
 
             if (idleDuration.getSeconds() > MAX_IDLE_TIME_IN_SECONDS) {
+                String target = entry.getKey();
                 try {
-                    dispose(entry.getKey());
-                    log.info("[TrainService] 인스턴스 파기: {}", entry.getKey());
+                    dispose(target);
+                    log.info("[TrainService] 인스턴스 파기: {}", target);
                 } catch (Exception e) {
-                    log.info("[TrainService] 인스턴스 파기 실패 : {} ", entry.getKey());
+                    log.info("[TrainService] 인스턴스 파기 실패 : {} ", target);
                     e.printStackTrace();
                 }
             }

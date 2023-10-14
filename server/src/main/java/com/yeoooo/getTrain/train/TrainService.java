@@ -29,7 +29,9 @@ import java.util.*;
 @Slf4j
 public class TrainService implements InitializingBean,DisposableBean {
 
-    private ChromeOptions options;
+    private ChromeOptions options = new ChromeOptions(){{
+        addArguments("--headless=new");
+    }};
     private WebDriver driver;
     private String email;
     private String ip;
@@ -46,10 +48,8 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-        this.options = new ChromeOptions();
-        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
 
-        this.driver = new ChromeDriver();
+        this.driver = new ChromeDriver(options);
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
@@ -99,7 +99,6 @@ public class TrainService implements InitializingBean,DisposableBean {
         WebElement input_sDay = driver.findElement(By.id("s_day"));
 
         WebElement input_sHour = driver.findElement(By.id("s_hour"));
-
 //        WebElement input_sWeek = driver.findElement(By.id("s_week"));
 //        WebElement peop01 = driver.findElement(By.id("peop01")); // 어른 인원 수
         WebElement btnInq = driver.findElement(By.className("btn_inq"));
@@ -116,11 +115,21 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
         WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofMinutes(30));
-
+        try {
+            WebElement korailAlert = driver.findElement(By.className("korail_alert"));
+            if (korailAlert != null) {
+                webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("korail_alert")));
+                driver.findElement(By.className("korail_alert")).findElement(By.className("plainmodal-close")).click();
+            }
+        } catch (Exception e) {
+            log.info("[TrainService] : korail_alert 요소 없음.");
+        }
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("tableResult")));
 
         WebElement tableResult = driver.findElement(By.id("tableResult"));
+        System.out.println("tableResult = " + tableResult);
         List<WebElement> tableResult_tbody = tableResult.findElements(By.tagName("tr"));
+        System.out.println("tableResult_tbody = " + tableResult_tbody);
 
         for (WebElement td :
                 tableResult_tbody) {
@@ -170,7 +179,6 @@ public class TrainService implements InitializingBean,DisposableBean {
             int t_time = (departure_time[0] * 60) + departure_time[1];
             int r_from = (range_from.getHour() * 60) + range_from.getMinute();
             int r_until = (range_until.getHour() * 60) + range_until.getMinute();
-
             if (r_from <= t_time && t_time <= r_until && (trainType == TrainType.ALL || trainType.equals(type))){
                 trains.add(
                     Train.builder()
@@ -275,6 +283,7 @@ public class TrainService implements InitializingBean,DisposableBean {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         while (stop) {
             ArrayList<Train> arrivals = get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
+            System.out.println("arrivals.toString() = " + arrivals.toString());
             if (!arrivals.isEmpty()) {
                 if (reserve(arrivals.get(0))) {
                     mailUtil.sendEmail(email, arrivals.get(0));
