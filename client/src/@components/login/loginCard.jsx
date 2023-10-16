@@ -4,21 +4,34 @@ import '../../style/login.css'
 import { styled } from 'styled-components';
 
 function LoginCard(){
+    // 배포 시 서버 도메인으로 변경되어야 함
+    const apiURL = 'http://localhost:8080/api/v1/login'
+
     const [type, setType] = useState('');
     const [id, setId] = useState('');
     const [pw, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
+    const [phoneNum1, setPhoneNum1] = useState('');
+    const [phoneNum2, setPhoneNum2] = useState('');
+    let phoneNum = '';
 
     // 로그인 타입
     const handleTypeChange = (event) => {
         setType(event);
-        // console.log(type);
     }
 
     // ID
     const handleIdChange = (event) => {
         setId(event.target.value);
+    }
+
+    const handlePhoneNumber1Change = (event) =>{
+        setPhoneNum1(event.target.value)
+    }
+
+    const handlePhoneNumber2Change = (event) =>{
+        setPhoneNum2(event.target.value)
     }
 
     // 비밀번호
@@ -35,7 +48,8 @@ function LoginCard(){
         event.preventDefault();
         
         try {
-            const response = await fetch('/api/v1/login', {
+            console.log(id, type, pw, email);
+            const response = await fetch(apiURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -107,13 +121,31 @@ function LoginCard(){
                     {type === 'PHONE_NUMBER_LOGIN' && (
                         <>
                             <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon'/>
-                            <LoginInput 
-                                type='number' 
+                            <PhoneLoginInput1
+                                type='tel'
                                 name='phone' 
-                                placeholder='번호를 입력해주세요'
-                                value={id}
+                                placeholder='앞 3.'
+                                value='010'
                                 required
-                                onChange={handleIdChange} />
+                                // onChange={handlePhoneNumberChange}
+                                maxlength={3}
+                                />
+                            <PhoneLoginInput2
+                              type='tel'
+                              name='phone'
+                              placeholder='앞 3자.'
+                              value={phoneNum1}
+                              required
+                              onChange={handlePhoneNumber1Change}
+                              maxlength={4}/>
+                            <PhoneLoginInput3
+                              type='tel'
+                              name='phone'
+                              placeholder='앞 3자리.'
+                              value={phoneNum2}
+                              required
+                              onChange={handlePhoneNumber2Change}
+                              maxlength={4}/>
                         </>
                     )}
                     {type === '' && (
@@ -201,6 +233,19 @@ const NoticeEmailIcon  = styled.img`
 `
 
 const LoginInput = styled.input`
+    padding: 0 0 0.5rem 2rem;
+`
+
+const PhoneLoginInput1 = styled.input`
+    width: 1px;
+    padding: 0 0 0.5rem 2rem;
+`
+const PhoneLoginInput2 = styled.input`
+    width: 1px;
+    padding: 0 0 0.5rem 2rem;
+`
+const PhoneLoginInput3 = styled.input`
+    width: 1px;
     padding: 0 0 0.5rem 2rem;
 `
 
