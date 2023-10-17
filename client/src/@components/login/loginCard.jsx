@@ -7,7 +7,7 @@ function LoginCard(){
     // 배포 시 서버 도메인으로 변경되어야 함
     const apiURL = 'http://localhost:8080/api/v1/login'
 
-    const [type, setType] = useState('');
+    const [type, setType] = useState('MEMBERSHIP_LOGIN');
     const [id, setId] = useState('');
     const [pw, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -87,9 +87,9 @@ function LoginCard(){
             
 
             <TabMenuWrapper className='tab-menu'>
-                <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')}>멤버십번호 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('EMAIL_LOGIN')}>이메일 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('PHONE_NUMBER_LOGIN')}>휴대번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')} className={type === 'MEMBERSHIP_LOGIN' ? 'active' : ''}>멤버십번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('EMAIL_LOGIN')} className={type === 'EMAIL_LOGIN' ? 'active' : ''}>이메일 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('PHONE_NUMBER_LOGIN')} className={type === 'PHONE_NUMBER_LOGIN' ? 'active' : ''}>휴대번호 로그인</a>
             </TabMenuWrapper>
 
             <form onSubmit={handleLogIn} className='login-input'>
@@ -146,18 +146,6 @@ function LoginCard(){
                               required
                               onChange={handlePhoneNumber2Change}
                               maxlength={4}/>
-                        </>
-                    )}
-                    {type === '' && (
-                        <>
-                            <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon' />
-                            <LoginInput 
-                                type='number' 
-                                name='phone' 
-                                placeholder='번호를 입력해주세요'
-                                value={id}
-                                required
-                                onChange={handleIdChange} />
                         </>
                     )}
                 </LoginInputBox>
@@ -237,15 +225,12 @@ const LoginInput = styled.input`
 `
 
 const PhoneLoginInput1 = styled.input`
-    width: 1px;
     padding: 0 0 0.5rem 2rem;
 `
 const PhoneLoginInput2 = styled.input`
-    width: 1px;
     padding: 0 0 0.5rem 2rem;
 `
 const PhoneLoginInput3 = styled.input`
-    width: 1px;
     padding: 0 0 0.5rem 2rem;
 `
 

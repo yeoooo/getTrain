@@ -1,4 +1,5 @@
-.main-bg{
+/* 공통 스타일 */
+.main-bg {
     background-color: #E9E9E9;
     width: 100%;
     height: 100vh;
@@ -7,7 +8,7 @@
     align-items: center;
 }
 
-.login-box{
+.login-box {
     border-radius: 1rem;
     padding: 5rem;
     width: 80rem;
@@ -16,17 +17,17 @@
     box-shadow: #a3a3a3 10px 10px 10px;
 }
 
-.tab-menu{
+.tab-menu {
     display: flex;
     justify-content: space-evenly;
     margin: 5rem 0;
 }
 
-.tab-menu > a{
+.tab-menu > a {
     font-size: 1.3rem;
 }
 
-.login-input{
+.login-input {
     display: grid;
     justify-content: center;
 }
@@ -36,16 +37,16 @@
     display: flex;
 }
 
-.login-input > div > input{
+.login-input > div > input {
     border-bottom: 1px solid #315A52;
     width: 25rem;
 }
 
-.login-input > div > img{
+.login-input > div > img {
     border-bottom: 1px solid #315A52;
 }
 
-.logo-img{
+.logo-img {
     display: flex;
     justify-content: center;
 }
@@ -53,4 +54,49 @@
 .logo-img > img {
     width: 200px;
     height: 40px;
+}
+
+/* 다크 모드 스타일 */
+@media (prefers-color-scheme: dark) {
+    .main-bg {
+        background-color: #333; /* 다크 모드 배경 색상 업데이트 */
+    }
+
+    .login-box {
+        background-color: #1a1a1a; /* 다크 모드 로그인 상자 배경 색상 업데이트 */
+        box-shadow: #000 10px 10px 10px; /* 다크 모드 그림자 업데이트 */
+    }
+
+    .login-input > div > input,
+    .login-input > div > img {
+        color: #ffffff;
+        border-bottom: 1px solid #fff; /* 다크 모드 로그인 입력 테두리 색상 업데이트 */
+    }
+}
+
+.active {
+    color: #3d6f65; /* 활성화된 탭의 텍스트 색상을 변경 */
+    font-weight: 700; /* 활성화된 탭의 폰트 두께를 변경 */
+    /* 다른 원하는 스타일 변경들도 추가할 수 있습니다. */
+}
+
+/* 라이트 모드 스타일 */
+@media (prefers-color-scheme: light) {
+    .main-bg {
+        background-color: #E9E9E9; /* 라이트 모드 배경 색상 업데이트 */
+    }
+
+    .login-box {
+        background-color: #FFFFFF; /* 라이트 모드 로그인 상자 배경 색상 업데이트 */
+        box-shadow: #a3a3a3 10px 10px 10px; /* 라이트 모드 그림자 업데이트 */
+    }
+
+    .tab-menu > a {
+        color: #000; /* 라이트 모드 탭 메뉴 글자 색상 업데이트 */
+    }
+
+    .login-input > div > input,
+    .login-input > div > img {
+        border-bottom: 1px solid #315A52; /* 라이트 모드 로그인 입력 테두리 색상 업데이트 */
+    }
 }
