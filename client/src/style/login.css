@@ -39,7 +39,6 @@
 
 .login-input > div > input {
     border-bottom: 1px solid #315A52;
-    width: 25rem;
 }
 
 .login-input > div > img {
@@ -70,7 +69,6 @@
     .login-input > div > input,
     .login-input > div > img {
         color: #ffffff;
-        border-bottom: 1px solid #fff; /* 다크 모드 로그인 입력 테두리 색상 업데이트 */
     }
 }
 
@@ -95,8 +93,4 @@
         color: #000; /* 라이트 모드 탭 메뉴 글자 색상 업데이트 */
     }
 
-    .login-input > div > input,
-    .login-input > div > img {
-        border-bottom: 1px solid #315A52; /* 라이트 모드 로그인 입력 테두리 색상 업데이트 */
-    }
 }

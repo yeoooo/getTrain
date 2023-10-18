@@ -14,7 +14,6 @@ function LoginCard(){
     const navigate = useNavigate();
     const [phoneNum1, setPhoneNum1] = useState('');
     const [phoneNum2, setPhoneNum2] = useState('');
-    let phoneNum = '';
 
     // 로그인 타입
     const handleTypeChange = (event) => {
@@ -28,10 +27,12 @@ function LoginCard(){
 
     const handlePhoneNumber1Change = (event) =>{
         setPhoneNum1(event.target.value)
+        setId(event.target.value + "-" + phoneNum2);
     }
 
     const handlePhoneNumber2Change = (event) =>{
         setPhoneNum2(event.target.value)
+        setId(phoneNum1 + "-" + event.target.value);
     }
 
     // 비밀번호
@@ -46,13 +47,12 @@ function LoginCard(){
 
     const handleLogIn = async (event) => {
         event.preventDefault();
-        
+
         try {
-            console.log(id, type, pw, email);
             const response = await fetch(apiURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     data: {
                         user: {
                             type: type,
@@ -61,13 +61,13 @@ function LoginCard(){
                             email: email
                         }
                     }
-                }),            
+                }),
             });
 
             if (response.status === 200) {
                 sessionStorage.setItem("email", email);
-                window.alert("로그인이 되었습니다!"); 
-                navigate('/search');  
+                window.alert("로그인이 되었습니다!");
+                navigate('/search');
 
             } else if (response.status === 404) {
                 window.alert("등록되어 있지 않은 아이디 및 비밀번호입니다 :(");
@@ -121,31 +121,32 @@ function LoginCard(){
                     {type === 'PHONE_NUMBER_LOGIN' && (
                         <>
                             <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon'/>
-                            <PhoneLoginInput1
-                                type='tel'
-                                name='phone' 
-                                placeholder='앞 3.'
-                                value='010'
-                                required
-                                // onChange={handlePhoneNumberChange}
-                                maxlength={3}
-                                />
-                            <PhoneLoginInput2
+                            <PhoneInput1 name="phone">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="016">016</option>
+                                <option value="017">017</option>
+                                <option value="018">018</option>
+                                <option value="019">019</option>
+                            </PhoneInput1>
+                            <PhoneLoginInput
                               type='tel'
                               name='phone'
-                              placeholder='앞 3자.'
+                              placeholder='0000'
                               value={phoneNum1}
                               required
                               onChange={handlePhoneNumber1Change}
-                              maxlength={4}/>
-                            <PhoneLoginInput3
+                              maxLength={4}
+                            />
+                            <PhoneLoginInput
                               type='tel'
                               name='phone'
-                              placeholder='앞 3자리.'
+                              placeholder='0000'
                               value={phoneNum2}
                               required
                               onChange={handlePhoneNumber2Change}
-                              maxlength={4}/>
+                              maxLength={4}
+                                />
                         </>
                     )}
                 </LoginInputBox>
@@ -195,9 +196,10 @@ const TabMenuWrapper = styled.div`
 const LoginInputBox = styled.div``
 
 const MemberIcon = styled.img`
-    width: 21px;
-    height: 22px;
-    padding: 0 0 2px 4px;   
+    width: 23px;
+    height: 24px;
+    padding: 0 0 6px 4px;
+    margin: 5px 0 0 0;
 `
 
 const EmailIcon = styled.img`
@@ -210,7 +212,8 @@ const EmailIcon = styled.img`
 const PhoneIcon = styled.img`
     width: 30px;
     height: 30px;
-    padding: 0 0 2px 3px;   
+    padding: 0  2px 3px;
+    
 `
 
 const NoticeEmailIcon  = styled.img`
@@ -222,28 +225,36 @@ const NoticeEmailIcon  = styled.img`
 
 const LoginInput = styled.input`
     padding: 0 0 0.5rem 2rem;
+    width: 100%;
 `
 
-const PhoneLoginInput1 = styled.input`
-    padding: 0 0 0.5rem 2rem;
+const PhoneInput1 = styled.select`
+    padding: 0 0 0rem 0.5rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #315A52;
+    margin: 0 10px 0 10px;
 `
-const PhoneLoginInput2 = styled.input`
-    padding: 0 0 0.5rem 2rem;
-`
-const PhoneLoginInput3 = styled.input`
-    padding: 0 0 0.5rem 2rem;
+const PhoneLoginInput = styled.input`
+    padding: 0 0 0rem 0.4rem;
+    margin-right: 10px;
+    width: 100%;
 `
 
 const MemberLoginInput = styled.input`
     padding: 0 0 0.5rem 2.8rem;
+    width: 25rem;
 `
 
 const EmailLoginInput = styled.input`
     padding: 0 0 0.5rem 2.5rem;
+    width: 25rem;
 `
 
 const NoticeEmailInput = styled.input`
     padding: 0 0 0.5rem 2.5rem;
+    width: 25rem;
+    width: 100%;
 `
 
 const LoginButton = styled.button`
