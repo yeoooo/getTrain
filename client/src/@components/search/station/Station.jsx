@@ -203,6 +203,7 @@ const StationInputBox = styled.div`
 `
 
 const DropDownBox = styled.ul`
+    color: #000;
     display: block;
     width: 16rem;
     padding: 0.8rem 1rem;
