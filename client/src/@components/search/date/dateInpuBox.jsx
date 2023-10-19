@@ -23,6 +23,10 @@ function DateInputBox(props){
         setIsOpen((preOpen) => !preOpen);
     };
 
+    const toggleCalendar = () => {
+        setIsOpen(!isOpen);
+    }
+
     // 기본 상태 (아코디언이 열려있는 상태)
     if(isOpen && selectedItem === null){
         return(
@@ -46,6 +50,7 @@ function DateInputBox(props){
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{format(selectedItem, 'MM월 dd일')}</h3>
+                        <button onClick={toggleCalendar}>Toggle Calendar</button>
                         <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
