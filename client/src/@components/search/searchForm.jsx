@@ -93,6 +93,7 @@ function SearchForm(){
     return(
         <SearchFormWrapper>
             <header>
+                <br/>
                 <h1>열차 정보 조회</h1>
                 <p>찾으실 열차 정보를 입력해주세요.</p>
             </header>
@@ -126,7 +127,7 @@ const SearchFormWrapper = styled.div``
 const SearchButton = styled.div`
     display: flex;
     justify-content: center;
-    margin: 10rem 0;
+    margin: 0 0;
 
     button{
         padding: 2rem 12rem;
