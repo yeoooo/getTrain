@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -204,9 +201,9 @@ public class TrainService implements InitializingBean,DisposableBean {
      * @param loginType
      * @param id
      * @param pw
-     * @return
+     * @return String
      */
-    public boolean login(LoginType loginType, String id, String pw) {
+    public String login(LoginType loginType, String id, String pw) {
         driver.get("https://www.letskorail.com/korail/com/login.do");
         WebElement aElement = driver.findElement(By.className("btn_login")).findElement(By.tagName("a"));
 
@@ -251,7 +248,16 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        return true;
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        try {
+            Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
+            String alertMsg = alert.getText();
+            alert.accept();
+            return alertMsg;
+
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public boolean reserve(Train train) throws ReserveFailedException {
