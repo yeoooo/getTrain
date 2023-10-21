@@ -34,7 +34,7 @@ public class TrainController {
     }
 
     @RequestMapping("/api/v1/login")
-    public ApiResponse<Map> login(@RequestBody Map<String, Object> req, HttpServletRequest servletRequest) throws UserAlreadyInUseException, LoginFailedException {
+    public ApiResponse<Map> login(@RequestBody Map<String, Object> req, HttpServletRequest servletRequest) throws Exception, LoginFailedException {
         Map<String, Object> data = (Map) req.get("data");
         Map<String, String> user = (Map) data.get("user");
 
@@ -43,14 +43,17 @@ public class TrainController {
 
         if (!TrainServicePool.is_using(client_ip)) {
             TrainService trainService = trainServicePool.putInstanceByEmail(email, servletRequest.getRemoteAddr());
-            if (trainService.login(LoginType.valueOf(user.get("type")), user.get("id"), user.get("pw"))) {
+            String loginMsg = trainService.login(LoginType.valueOf(user.get("type")), user.get("id"), user.get("pw"));
+            if (loginMsg.isEmpty()) {
                 return ApiResponse.ok(user);
+            }else{
+//                trainServicePool.dispose(email);
+                return ApiResponse.fail(HttpStatus.UNAUTHORIZED, loginMsg);
             }
         } else {
-            throw new UserAlreadyInUseException("이미 사용중인 유저입니다.");
+            throw new UserAlreadyInUseException("이미 사용 중인 유저입니다.");
         }
 
-        throw new LoginFailedException("로그인에 실패했습니다.");
     }
 
     @RequestMapping("/api/v1/reserve")
