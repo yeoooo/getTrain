@@ -248,16 +248,12 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        try {
-            Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
-            String alertMsg = alert.getText();
+        ExpectedConditions.alertIsPresent().andThen(alert -> {
             alert.accept();
-            return alertMsg;
+            return alert.getText();
+        });
 
-        } catch (Exception e) {
-            return "";
-        }
+        return "";
     }
 
     public boolean reserve(Train train) throws ReserveFailedException {
@@ -307,17 +303,33 @@ public class TrainService implements InitializingBean,DisposableBean {
     /**
      * 드라이버를 통해 로그아웃을 수행하는 함수
      */
-    public void logout() {
+    public boolean logout() {
         driver.get("https://www.letskorail.com/ebizprd/prdMain.do");
         WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(3);
         WebElement aElement = logout_li.findElement(By.tagName("a"));
 
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript(aElement.getAttribute("onclick"));
+        try {
+            //로그인이 되어있지 않은 경우
+            if (aElement.getAttribute("alt").contains("로그아웃") || aElement.getAttribute("alt").toLowerCase().contains("logout")) {
+                return false;
+            }
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        webDriverWait.until(ExpectedConditions.alertIsPresent());
-        driver.switchTo().alert().accept();
+        } catch (NullPointerException e) {
+            //로그인이 되어있어 logout 버튼이 뜨지 않는 경우
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+            jsExecutor.executeScript(aElement.getAttribute("onclick"));
+
+            WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            try {
+                webDriverWait.until(ExpectedConditions.alertIsPresent());
+                driver.switchTo().alert().accept();
+
+            } catch (TimeoutException te) {
+                return true;
+            }
+        }
+        return true;
+
     }
 
     /**
