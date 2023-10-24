@@ -47,7 +47,7 @@ public class TrainController {
             if (loginMsg.isEmpty()) {
                 return ApiResponse.ok(user);
             }else{
-//                trainServicePool.dispose(email);
+                trainServicePool.dispose(email);
                 return ApiResponse.fail(HttpStatus.UNAUTHORIZED, loginMsg);
             }
         } else {
@@ -70,15 +70,12 @@ public class TrainController {
                     .orElseThrow(() -> new ReserveFailedException("예약이 취소 되었습니다."));
             return ApiResponse.ok(res);
         } else {
-            throw new LoginFailedException("코레일 로그인에 실패했습니다.");
+            throw new LoginFailedException();
         }
     }
 
     @RequestMapping("/api/v1/logout")
-    public ApiResponse<String> logout(@RequestBody Map<String, Object> req) {
-        Map<String, Object> data = (Map) req.get("data");
-        String email = (String) data.get("email");
-
+    public ApiResponse<String> logout(@RequestParam("email") String email) {
         TrainService trainService = trainServicePool.getInstanceByEmail(email);
         trainService.logout();
         return ApiResponse.ok("success");
