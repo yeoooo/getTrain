@@ -252,26 +252,16 @@ public class TrainService implements InitializingBean,DisposableBean {
         WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(3));
         try {
             Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
-            if (alert.equals(null)) {
-                return alert.getText();
+            if (alert != null) {
+                String alertMsg = alert.getText();
+                alert.accept();
+                return alertMsg;
             }
 
         } catch (TimeoutException e) {
             log.info("[TrainService] : 로그인 성공.");
         }
             return "";
-
-
-//
-//        ExpectedConditions.alertIsPresent().andThen(alert -> {
-//            System.out.println("alert.getText() = " + alert.getText());
-//            alert.accept();
-//            System.out.println("alert.getText() = " + alert.getText());
-//            return alert.getText();
-//        });
-//        System.out.println("alert.getText() =dgdg ");
-//
-//        return "";
     }
 
     public boolean reserve(Train train) throws ReserveFailedException {
