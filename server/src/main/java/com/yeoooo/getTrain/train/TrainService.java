@@ -46,8 +46,8 @@ public class TrainService implements InitializingBean,DisposableBean {
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
-//        this.driver = new ChromeDriver(options);
-        this.driver = new ChromeDriver();
+        this.driver = new ChromeDriver(options);
+//        this.driver = new ChromeDriver(); 디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
