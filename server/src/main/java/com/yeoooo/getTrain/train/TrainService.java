@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -50,6 +47,7 @@ public class TrainService implements InitializingBean,DisposableBean {
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
         this.driver = new ChromeDriver(options);
+//        this.driver = new ChromeDriver(); 디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
@@ -204,9 +202,9 @@ public class TrainService implements InitializingBean,DisposableBean {
      * @param loginType
      * @param id
      * @param pw
-     * @return
+     * @return String
      */
-    public boolean login(LoginType loginType, String id, String pw) {
+    public String login(LoginType loginType, String id, String pw) {
         driver.get("https://www.letskorail.com/korail/com/login.do");
         WebElement aElement = driver.findElement(By.className("btn_login")).findElement(By.tagName("a"));
 
@@ -251,7 +249,19 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        return true;
+        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        try {
+            Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
+            if (alert != null) {
+                String alertMsg = alert.getText();
+                alert.accept();
+                return alertMsg;
+            }
+
+        } catch (TimeoutException e) {
+            log.info("[TrainService] : 로그인 성공.");
+        }
+            return "";
     }
 
     public boolean reserve(Train train) throws ReserveFailedException {
@@ -301,17 +311,33 @@ public class TrainService implements InitializingBean,DisposableBean {
     /**
      * 드라이버를 통해 로그아웃을 수행하는 함수
      */
-    public void logout() {
+    public boolean logout() {
         driver.get("https://www.letskorail.com/ebizprd/prdMain.do");
         WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(3);
         WebElement aElement = logout_li.findElement(By.tagName("a"));
 
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript(aElement.getAttribute("onclick"));
+        try {
+            //로그인이 되어있지 않은 경우
+            if (aElement.getAttribute("alt").contains("로그아웃") || aElement.getAttribute("alt").toLowerCase().contains("logout")) {
+                return false;
+            }
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        webDriverWait.until(ExpectedConditions.alertIsPresent());
-        driver.switchTo().alert().accept();
+        } catch (NullPointerException e) {
+            //로그인이 되어있어 logout 버튼이 뜨지 않는 경우
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+            jsExecutor.executeScript(aElement.getAttribute("onclick"));
+
+            WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            try {
+                webDriverWait.until(ExpectedConditions.alertIsPresent());
+                driver.switchTo().alert().accept();
+
+            } catch (TimeoutException te) {
+                return true;
+            }
+        }
+        return true;
+
     }
 
     /**

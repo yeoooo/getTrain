@@ -34,7 +34,7 @@ public class TrainController {
     }
 
     @RequestMapping("/api/v1/login")
-    public ApiResponse<Map> login(@RequestBody Map<String, Object> req, HttpServletRequest servletRequest) throws UserAlreadyInUseException, LoginFailedException {
+    public ApiResponse<Map> login(@RequestBody Map<String, Object> req, HttpServletRequest servletRequest) throws Exception, LoginFailedException {
         Map<String, Object> data = (Map) req.get("data");
         Map<String, String> user = (Map) data.get("user");
 
@@ -43,14 +43,17 @@ public class TrainController {
 
         if (!TrainServicePool.is_using(client_ip)) {
             TrainService trainService = trainServicePool.putInstanceByEmail(email, servletRequest.getRemoteAddr());
-            if (trainService.login(LoginType.valueOf(user.get("type")), user.get("id"), user.get("pw"))) {
+            String loginMsg = trainService.login(LoginType.valueOf(user.get("type")), user.get("id"), user.get("pw"));
+            if (loginMsg.isEmpty()) {
                 return ApiResponse.ok(user);
+            }else{
+                trainServicePool.dispose(email);
+                return ApiResponse.fail(HttpStatus.UNAUTHORIZED, loginMsg);
             }
         } else {
-            throw new UserAlreadyInUseException("이미 사용중인 유저입니다.");
+            throw new UserAlreadyInUseException("이미 사용 중인 유저입니다.");
         }
 
-        throw new LoginFailedException("로그인에 실패했습니다.");
     }
 
     @RequestMapping("/api/v1/reserve")
@@ -67,15 +70,12 @@ public class TrainController {
                     .orElseThrow(() -> new ReserveFailedException("예약이 취소 되었습니다."));
             return ApiResponse.ok(res);
         } else {
-            throw new LoginFailedException("코레일 로그인에 실패했습니다.");
+            throw new LoginFailedException();
         }
     }
 
     @RequestMapping("/api/v1/logout")
-    public ApiResponse<String> logout(@RequestBody Map<String, Object> req) {
-        Map<String, Object> data = (Map) req.get("data");
-        String email = (String) data.get("email");
-
+    public ApiResponse<String> logout(@RequestParam("email") String email) {
         TrainService trainService = trainServicePool.getInstanceByEmail(email);
         trainService.logout();
         return ApiResponse.ok("success");

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @ToString
@@ -43,8 +41,9 @@ public class TrainServicePool {
     public void dispose(String email) throws Exception {
         TrainService service = getInstanceByEmail(email);
         service.setStop(false);
-        service.logout();
-        log.info("[TrainServicePool] {} [driver] 로그아웃.", email);
+        if (service.logout()){
+            log.info("[TrainServicePool] {} [driver] 로그아웃.", email);
+        };
         service.quit();
         service.destroy();
         log.info("[TrainServicePool] {} [driver] 종료.", email);
