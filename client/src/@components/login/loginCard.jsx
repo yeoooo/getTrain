@@ -63,13 +63,13 @@ function LoginCard(){
                     }
                 }),
             }).then((res) => res.json());
-
-            if (response.status === 200) {
+            console.log(response)
+            if (response.status === 'OK') {
                 sessionStorage.setItem("email", email);
                 window.alert("로그인이 되었습니다!");
                 navigate('/search');
 
-            } else if (response.code === 401) {
+            } else if (response.status === 'UNAUTHORIZED') {
                 window.alert("등록되어 있지 않은 아이디 및 비밀번호입니다 :(");
                 window.alert(response.data);
             } else {
