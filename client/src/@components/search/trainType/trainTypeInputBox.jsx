@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../../../style/searchForm.css'
 import InputSection from '../inputSection'
+import styled from 'styled-components';
 
 
 function TrainTypeInputBox(props){
@@ -19,7 +20,7 @@ function TrainTypeInputBox(props){
 
     // 화살표 아이콘 클릭 시 아코디언 상태 변경
     const handleAccordionToggle = () => {
-        setIsOpen((preOpen) => !preOpen);
+        setIsOpen((isOpen) => !isOpen);
     };
 
     // 기본 상태 (아코디언이 열려있는 상태)
@@ -30,7 +31,6 @@ function TrainTypeInputBox(props){
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{props.title}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
                 </div>
@@ -60,15 +60,16 @@ function TrainTypeInputBox(props){
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{selectedItem}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
                 </div>
             </div>
         );
     }
-    
-    
+const ArrowIcon = styled.img`
+    align-content: end;
+    margin-top: 10rem;
+`
 }
 
 export default TrainTypeInputBox
