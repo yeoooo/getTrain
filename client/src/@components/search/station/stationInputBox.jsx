@@ -44,22 +44,36 @@ function StationInputBox(props){
     // 기본 상태 (아코디언이 열려있는 상태)
     if(isOpen && selectedDepartStation === '' && selectedArrivalStation === ''){
         return(
-            <div className='input-warpper'>
+            <div className='input-wrapper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{props.title}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
             </div>
         );
-    } 
+    }
+    else if(!isOpen && selectedDepartStation === '' && selectedArrivalStation === ''){
+        return(
+          <div className='input-wrapper'>
+              <div className='input-box'>
+                  <div className='input-box-header'>
+                      <img src={props.icon} className='train-icon' alt='icon'/>
+                      <h3>{props.title}</h3>
+                      <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
+                  </div>
+                  <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
+              </div>
+          </div>
+        );
+    }
     // 출발역 입력값을 넣은 후 아코디언이 아직 펼쳐져 있는 상태 (출발역만 입력한 상태)
     else if(isOpen && selectedDepartStation !== '' && selectedArrivalStation === '') {
         return(
-            <div className='input-warpper'>
+            <div className='input-wrapper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
@@ -67,7 +81,7 @@ function StationInputBox(props){
                         <h3>{selectedDepartStation} → </h3>
                         {/* {selectedDepartStation !== '' && selectedArrivalStation === '' ? <h3>{selectedStations.depart} → </h3> : <h3>{props.title}</h3>} */}
 
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title}  handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
@@ -77,12 +91,12 @@ function StationInputBox(props){
     // 입력값을 넣은 후 아코디언이 접혀져 있는 상태 (출발역 && 도착역 모두 입력한 상태)
     else if(!isOpen && selectedDepartStation !== '' && selectedArrivalStation !== '') {
         return(
-            <div className='input-warpper'>
+            <div className='input-wrapper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{selectedDepartStation} → {selectedArrivalStation}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
@@ -92,12 +106,12 @@ function StationInputBox(props){
     // 입력 후 아코디언을 여는 상태
     else if(isOpen && selectedDepartStation !== '' && selectedArrivalStation !== ''){
         return(
-            <div className='input-warpper'>
+            <div className='input-wrapper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{selectedDepartStation} → {selectedArrivalStation}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
@@ -106,12 +120,12 @@ function StationInputBox(props){
     }
     else{// 기본 상태 (아코디언이 열려있는 상태)
         return(
-            <div className='input-warpper'>
+            <div className='input-wrapper'>
                 <div className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{props.title}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
                 </div>
@@ -119,5 +133,13 @@ function StationInputBox(props){
         );
     }
 }
-
+const ArrowIcon = styled.img`
+    width: 3rem;
+    height: 1.8rem;
+    position: absolute;
+    bottom: 0.1rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: all 0.35s ease;
+`
 export default StationInputBox

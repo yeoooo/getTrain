@@ -30,28 +30,42 @@ function DateInputBox(props){
     // 기본 상태 (아코디언이 열려있는 상태)
     if(isOpen && selectedItem === null){
         return(
-            <InputWrapper className='input-warpper'>
+            <InputWrapper className='input-wrapper'>
                 <DateInputBoxSection className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{props.title}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
                 </DateInputBoxSection>
             </InputWrapper>
         );
-    } 
+    }
+    else if(!isOpen && selectedItem === null){
+        return(
+          <InputWrapper className='input-wrapper'>
+              <DateInputBoxSection className='input-box'>
+                  <div className='input-box-header'>
+                      <img src={props.icon} className='train-icon' alt='icon'/>
+                      <h3>{props.title}</h3>
+                      <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
+                  </div>
+                  <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
+              </DateInputBoxSection>
+          </InputWrapper>
+        );
+    }
     // 입력값을 넣은 후 아코디언이 접혀져 있는 상태
     else if(!isOpen && selectedItem !== null) {
         return(
-            <InputWrapper className='input-warpper'>
+            <InputWrapper className='input-wrapper'>
                 <DateInputBoxSection className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{format(selectedItem, 'MM월 dd일')}</h3>
-                        <button onClick={toggleCalendar}>Toggle Calendar</button>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
+                        {/*<button onClick={toggleCalendar}>Toggle Calendar</button>*/}
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
                 </DateInputBoxSection>
@@ -61,12 +75,12 @@ function DateInputBox(props){
     // 입력 후 아코디언을 여는 상태
     else if(isOpen && selectedItem !== null){
         return(
-            <InputWrapper className='input-warpper'>
+            <InputWrapper className='input-wrapper'>
                 <DateInputBoxSection className='input-box'>
                     <div className='input-box-header'>
                         <img src={props.icon} className='train-icon' alt='icon'/>
                         <h3>{format(selectedItem, 'MM월 dd일')}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
+                        <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
                     <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
                 </DateInputBoxSection>
@@ -81,6 +95,14 @@ const InputWrapper = styled.div``
 
 const DateInputBoxSection = styled.div`
 `
-
+const ArrowIcon = styled.img`
+    width: 3rem;
+    height: 1.8rem;
+    position: absolute;
+    bottom: 0.1rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: all 0.35s ease;
+`
 
 export default DateInputBox
