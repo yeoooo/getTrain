@@ -23,7 +23,7 @@ function TrainTypeInputBox(props){
         setIsOpen((preOpen) => !preOpen);
     };
     const arrowDirection = {
-        transform: 'rotate(' + 180 * isOpen + 'deg)'
+        transform: 'rotate(' + 180 * !isOpen + 'deg)'
     }
 
     return(
@@ -47,5 +47,6 @@ const ArrowIcon = styled.img`
     bottom: 0.1rem;
     cursor: pointer;
     transition: all 0.35s ease;
+    margin-left: 1rem;
 `
 export default TrainTypeInputBox
