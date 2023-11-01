@@ -10,7 +10,7 @@ function TrainTypeInputBox(props){
     // console.log(isOpen);
     // 열차 선택 체크박스에서 선택한 항목을 자식 컴포넌트에서 가져오기
     const [selectedItem, setSelectedItem] = useState(null);
-    
+
     // 아코디언 토글 (열차 선택 체크박스)
     const handleSelectedItem = (item) => {
         setSelectedItem(item);
@@ -20,56 +20,32 @@ function TrainTypeInputBox(props){
 
     // 화살표 아이콘 클릭 시 아코디언 상태 변경
     const handleAccordionToggle = () => {
-        setIsOpen((isOpen) => !isOpen);
+        setIsOpen((preOpen) => !preOpen);
     };
+    const arrowDirection = {
+        transform: 'rotate(' + 180 * isOpen + 'deg)'
+    }
 
-    // 기본 상태 (아코디언이 열려있는 상태)
-    if(isOpen && selectedItem === null){
-        return(
-            <div className='input-warpper'>
-                <div className='input-box'>
-                    <div className='input-box-header'>
-                        <img src={props.icon} className='train-icon' alt='icon'/>
-                        <h3>{props.title}</h3>
-                    </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
-                </div>
-            </div>
+    return(
+          <div className='input-wrapper'>
+              <div className='input-box'>
+                  <div className='input-box-header'>
+                      <img src={props.icon} className='train-icon' alt='icon'/>
+                      <h3>{props.title}</h3>
+                      <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={arrowDirection} onClick={handleAccordionToggle}/></a>
+                  </div>
+                  <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
+              </div>
+          </div>
         );
-    } 
-    // 입력값을 넣은 후 아코디언이 접혀져 있는 상태
-    else if(!isOpen && selectedItem !== null) {
-        return(
-            <div className='input-warpper'>
-                <div className='input-box'>
-                    <div className='input-box-header'>
-                        <img src={props.icon} className='train-icon' alt='icon'/>
-                        <h3>{selectedItem}</h3>
-                        <a href='#'><img src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
-                    </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
-                </div>
-            </div>
-        );
-    }
-    // 입력 후 아코디언을 여는 상태
-    else if(isOpen && selectedItem !== null){
-        return(
-            <div className='input-warpper'>
-                <div className='input-box'>
-                    <div className='input-box-header'>
-                        <img src={props.icon} className='train-icon' alt='icon'/>
-                        <h3>{selectedItem}</h3>
-                    </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
-                </div>
-            </div>
-        );
-    }
-const ArrowIcon = styled.img`
-    align-content: end;
-    margin-top: 10rem;
-`
+
 }
-
+const ArrowIcon = styled.img`
+    width: 3rem;
+    height: 1.8rem;
+    position: absolute;
+    bottom: 0.1rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+`
 export default TrainTypeInputBox
