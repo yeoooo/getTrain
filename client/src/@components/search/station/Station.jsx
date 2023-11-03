@@ -80,6 +80,28 @@ function Station(props){
         }
     }
 
+    const onBlurInputDropDownList = () =>{
+        if(arrivalInputValue !== dropDownList[0]){
+            setInputValue(dropDownList[0]);
+            setIsHaveInputValue(false);
+            props.handleDepartStationsItem(dropDownList[0]);
+        } else{
+            setInputValue("");
+            alert("출발역과 도착역이 같아요!");
+        }
+    }
+
+    const onBlurArrivalDropDownList = () => {
+        if (inputValue !== arrivalDropDownList[0]) {
+            setArrivalInputValue(arrivalDropDownList[0]);
+            setIsHaveArrivalInputValue(false);
+            props.handleArrivalStationsItem(arrivalDropDownList[0]);
+        } else{
+            setArrivalInputValue("");
+            alert("출발역과 도착역이 같아요!");
+        }
+    }
+
     useEffect(showArrivalDropDownList, [arrivalInputValue]);
     
     return(
@@ -93,7 +115,8 @@ function Station(props){
                         name='departure' 
                         placeholder=' 출발역을 입력해주세요.'
                         value={inputValue}
-                        onChange={changeInputValue} />
+                        onChange={changeInputValue}
+                        onBlur={onBlurInputDropDownList}/>
 
                     {/* 자동완성 드롭다운 */}
                     {isHaveInputValue && (
@@ -130,7 +153,8 @@ function Station(props){
                         name='arrival' 
                         placeholder=' 도착역을 입력해주세요.'
                         value={arrivalInputValue}
-                        onChange={changeArrivalInputValue}/>
+                        onChange={changeArrivalInputValue}
+                        onBlur={onBlurArrivalDropDownList}/>
                     {/* 자동완성 드롭다운 */}
                     {isHaveArrivalInputValue && (
                         <DropDownBox>
@@ -146,7 +170,6 @@ function Station(props){
                                         onClick={() => clickArrivalDropDownItem(arrivalDropDownItem)}
                                         onMouseOver={() => setArrivalDropDownItemIndex(arrivalDropDownItem)}
                                         className={arrivalDropDownItemIndex === arrivalDropDownIndex ? 'selected' : ''}>
-                                        
                                         {arrivalDropDownItem}
                                     </DropDownItem>
                                 )
