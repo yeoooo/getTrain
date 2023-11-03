@@ -5,12 +5,11 @@ import styled from 'styled-components';
 function CheckBox(props){
     // 선택 목록
     const CATEGORY_LIST = [
-        {id: 0, data: '전체'},
-        {id: 1, data: 'KTX/SRT'},
-        {id: 2, data: 'ITX-청춘'},
-        {id: 3, data: '새마을ITX-새마을'},
-        {id: 4, data: '무궁화/누리로'},
-        {id: 5, data: '통근열차'},
+        {id: 0, data: 'ALL', display: '전체'},
+        {id: 1, data: 'KTX', display: 'KTX'},
+        {id: 2, data: 'ITX', display: 'ITX-새마을/마음'},
+        {id: 4, data: 'MUGUNGWHA', display: '무궁화'},
+
     ];
 
     // 선택값이 들어갈 빈 배열
@@ -48,7 +47,7 @@ function CheckBox(props){
                     checked = {checkItem === CATEGORY_LIST.id}
                     />
                     
-                <p>{CATEGORY_LIST.data}</p>
+                <p>{CATEGORY_LIST.display}</p>
             </div> 
             ))}
         </CheckBoxWrapper>
