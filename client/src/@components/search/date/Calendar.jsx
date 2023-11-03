@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import '../../../style/calendar.css'
 import styled from 'styled-components';
 import { format, addMonths, subMonths, 
@@ -7,8 +7,29 @@ import { format, addMonths, subMonths,
          startOfWeek, endOfWeek, isBefore } from 'date-fns';
 
 const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
+    const now = new Date();
+    const getNextHour = () => {
+        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
+        return format(now, "HH:mm:00");
+    }
+
+    const [fromTime, setFromTime] = useState(format(now, "HH:mm:00")); // 초기 시간
+    const [untilTime, setUntilTime] = useState(getNextHour); // 초기 시간
+
+    const handleFromTime = (event) => {
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
+        setFromTime(newTime); // 선택된 시간을 상태로 업데이트
+    };
+    const handleUntilTime = (event) => {
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
+        setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
+    };
+
     return(
-        <div >
+        <div>
+            <div align={"center"} style={{height:"3rem"}}>
+                <TimeInput type={"time"} value={fromTime} onChange={handleFromTime}/> &nbsp;~&nbsp; <TimeInput type={"time"} onChange={handleUntilTime} value={untilTime}/>
+            </div>
             {/* 이전 다음달 아이콘 */}
             <div className='month-header'>
                 <img src='../../src/assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
@@ -102,8 +123,10 @@ function Calendar(props){
 
     // 날짜 선택
     const onClickDate = (date) => {
-        const formattedDay = format(date, 'yyyyMMddHHmmss');
-        const parsedDay = parse(formattedDay, 'yyyyMMddHHmmss', new Date());
+        // const formattedDay = format(date, 'yyyyMMddHHmmss');
+        // const parsedDay = parse(formattedDay, 'yyyyMMddHHmmss', new Date());
+        const formattedDay = format(date, 'yyyyMMdd');
+        const parsedDay = parse(formattedDay, 'yyyyMMdd', new Date());
         setSelectedDate(parsedDay);
         props.handleSelectedItem(parsedDay);
         // console.log(formattedDay);
@@ -142,5 +165,7 @@ const CalendarWrapper = styled.div`
     max-height: ${({ open }) => (open ? '60rem' : '0')};
     transition: opacity 0.1s, visibility 0.3s, max-height 0.7s;
 `
-
+const TimeInput = styled.input`
+    color: #ffffff;
+`
 export default Calendar
