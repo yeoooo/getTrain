@@ -60,7 +60,6 @@ public class TrainController {
     public ApiResponse<Train> reserve(@RequestBody Map<String, Object> req) throws InterruptedException, ReserveFailedException, LoginFailedException {
         Map<String, Object> data = (Map) req.get("data");
         String email = (String) data.get("email");
-
         TrainService trainService = trainServicePool.getInstanceByEmail(email);
 
         if (trainService.chk_login()) {
@@ -75,9 +74,8 @@ public class TrainController {
     }
 
     @RequestMapping("/api/v1/logout")
-    public ApiResponse<String> logout(@RequestParam("email") String email) {
-        TrainService trainService = trainServicePool.getInstanceByEmail(email);
-        trainService.logout();
+    public ApiResponse<String> logout(@RequestParam("email") String email) throws Exception {
+        trainServicePool.dispose(email);
         return ApiResponse.ok("success");
     }
 

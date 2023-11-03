@@ -10,6 +10,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -91,12 +92,17 @@ public class TrainService implements InitializingBean,DisposableBean {
         input_get.clear();
 
         WebElement input_sYear = driver.findElement(By.id("s_year"));
+        Select sYearSelect = new Select(input_sYear);
 
         WebElement input_sMonth = driver.findElement(By.id("s_month"));
+        Select sMonthSelect = new Select(input_sMonth);
+
 
         WebElement input_sDay = driver.findElement(By.id("s_day"));
+        Select sDaySelect = new Select(input_sDay);
 
         WebElement input_sHour = driver.findElement(By.id("s_hour"));
+        Select sHourSelect = new Select(input_sHour);
 //        WebElement input_sWeek = driver.findElement(By.id("s_week"));
 //        WebElement peop01 = driver.findElement(By.id("peop01")); // 어른 인원 수
         WebElement btnInq = driver.findElement(By.className("btn_inq"));
@@ -105,10 +111,11 @@ public class TrainService implements InitializingBean,DisposableBean {
         input_start.sendKeys(from);
         input_get.sendKeys(to);
 
-        input_sYear.sendKeys(String.valueOf(range_from.getYear()));
-        input_sMonth.sendKeys(calendar.get(String.valueOf(range_from.getMonth())).toString());
-        input_sDay.sendKeys(String.valueOf(range_from.getDayOfMonth()));
-        input_sHour.sendKeys(String.valueOf(range_from.getHour()));
+        sYearSelect.selectByValue(String.valueOf(range_from.getYear()));
+        sMonthSelect.selectByValue(calendar.get(String.valueOf(range_from.getMonth())).toString());
+        sDaySelect.selectByValue(String.valueOf(range_from.getDayOfMonth()));
+        sHourSelect.selectByValue(String.valueOf(range_from.getHour()));
+
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
@@ -125,9 +132,7 @@ public class TrainService implements InitializingBean,DisposableBean {
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("tableResult")));
 
         WebElement tableResult = driver.findElement(By.id("tableResult"));
-        System.out.println("tableResult = " + tableResult);
         List<WebElement> tableResult_tbody = tableResult.findElements(By.tagName("tr"));
-        System.out.println("tableResult_tbody = " + tableResult_tbody);
 
         for (WebElement td :
                 tableResult_tbody) {
