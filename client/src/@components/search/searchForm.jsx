@@ -12,11 +12,18 @@ function SearchForm(){
     const [trainType, setTrainType] = useState(null);
     const [departStation, setDepartStation] = useState(null);
     const [arrivalStation, setArrivalStation] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [untilTime, setUntilTime] = useState(null);
-    const [fromTime, setFromTime] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const navigate = useNavigate();
 
+    const getNextHour = () => {
+        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
+        return format(now, "HH:mm:00");
+    }
+
+    //시간 변수
+    const now = new Date();
+    const [fromTime, setFromTime] = useState(format(new Date(), "HH:mm:00"));
+    const [untilTime, setUntilTime] = useState(getNextHour);
     // 선택 날짜 포맷
     const dateToString = new Date(selectedDate).toISOString();
     const parsedDate = parseISO(dateToString, 'yyyyMMddHHmmss');
@@ -109,6 +116,8 @@ function SearchForm(){
                     icon='../../src/assets/calendar.png' 
                     title='출발일을 선택해주세요'
                     handleSelectedItem={setSelectedDate}
+                    fromTime = {fromTime}
+                    untilTime = {untilTime}
                     handleFromTime={setFromTime}
                     handleUntilTime={setUntilTime}/>
             </section>

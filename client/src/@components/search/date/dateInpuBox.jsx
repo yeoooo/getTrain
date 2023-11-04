@@ -51,7 +51,7 @@ function DateInputBox(props){
                     </div>
 
 
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
+                    <InputSection title={props.title} fromTime={props.fromTime} untilTime={props.untilTime} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
                 </DateInputBoxSection>
             </InputWrapper>
         );
@@ -65,7 +65,7 @@ function DateInputBox(props){
                       <h3>{props.title}</h3>
                       <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                   </div>
-                  <InputSection title={props.title} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
+                  <InputSection title={props.title} fromTime={props.fromTime} untilTime={props.untilTime} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
               </DateInputBoxSection>
           </InputWrapper>
         );
@@ -80,7 +80,7 @@ function DateInputBox(props){
                         <h3>{format(selectedItem, 'MM월 dd일')}</h3>
                         <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={{transform: 'rotate(180deg)'}} onClick={handleAccordionToggle}/></a>
                     </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
+                    <InputSection title={props.title} fromTime={props.fromTime} untilTime={props.untilTime} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
                 </DateInputBoxSection>
             </InputWrapper>
         );
@@ -95,7 +95,7 @@ function DateInputBox(props){
                         <h3>{format(selectedItem, 'MM월 dd일')}</h3>
                         <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle}/></a>
                     </div>
-                    <InputSection title={props.title} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
+                    <InputSection title={props.title} fromTime={props.fromTime} untilTime={props.untilTime} handleSelectedItem={handleSelectedItem} handleFromTime={handleFromTime} handleUntilTime={handleUntilTime} isOpen={isOpen}/>
                 </DateInputBoxSection>
             </InputWrapper>
         );

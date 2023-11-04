@@ -79,14 +79,8 @@ function Calendar(props){
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const now = new Date();
-    const getNextHour = () => {
-        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
-        return format(now, "HH:mm:00");
-    }
-
-    const [fromTime, setFromTime] = useState(format(now, "HH:mm:00")); // 초기 시간
-    const [untilTime, setUntilTime] = useState(getNextHour); // 초기 시간
+    const [fromTime, setFromTime] = useState(props.fromTime); // until
+    const [untilTime, setUntilTime] = useState(props.untilTime); // from
 
     const handleFromTime = (event) => {
         const newTime = event.target.value; // 사용자가 선택한 새 시간

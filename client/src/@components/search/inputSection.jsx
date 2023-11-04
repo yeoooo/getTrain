@@ -14,8 +14,8 @@ function InputSection(props){
     } else if(requestTitle == '출발역 → 도착역'){
         return <Station handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
     } else if(requestTitle == '출발일을 선택해주세요'){
-        return <Calendar handleSelectedItem={handleSelectedItem} handleUntilTime={handleUntilTime} handleFromTime={handleFromTime} isOpen={isOpen}/>;
-    } 
+        return <Calendar fromTime={props.fromTime} untilTime={props.untilTime} handleSelectedItem={handleSelectedItem} handleUntilTime={handleUntilTime} handleFromTime={handleFromTime} isOpen={isOpen}/>;
+    }
 
 }
 
