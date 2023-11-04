@@ -55,11 +55,10 @@ function SearchForm(){
         //     console.log(trainType);
         // }
         // // console.log(trainType);
-        
+
         event.preventDefault();
 
         try {
-            console.log(timeFrom)
             const response = await fetch('http://127.0.0.1:8080/api/v1/reserve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -69,10 +68,10 @@ function SearchForm(){
                             trainType: trainType,
                             from: departStation,
                             to: arrivalStation,
-                            time_from: timeFrom + fromTime,
-                            time_until: timeUntil + untilTime,
+                            time_from: timeFrom + fromTime.replace(":", "") + "00",
+                            time_until: timeUntil + untilTime.replace(":", "") + "00"
                         }
-                    } 
+                    }
                 }),
             });
             if (response.status === 200) {
@@ -85,7 +84,7 @@ function SearchForm(){
         } catch(error){
             console.log(error.message);
         }
-        
+
     }
 
     return(

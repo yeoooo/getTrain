@@ -7,29 +7,9 @@ import { format, addMonths, subMonths,
          startOfWeek, endOfWeek, isBefore } from 'date-fns';
 
 const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
-    const now = new Date();
-    const getNextHour = () => {
-        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
-        return format(now, "HH:mm:00");
-    }
-
-    const [fromTime, setFromTime] = useState(format(now, "HH:mm:00")); // 초기 시간
-    const [untilTime, setUntilTime] = useState(getNextHour); // 초기 시간
-
-    const handleFromTime = (event) => {
-        const newTime = event.target.value; // 사용자가 선택한 새 시간
-        setFromTime(newTime); // 선택된 시간을 상태로 업데이트
-    };
-    const handleUntilTime = (event) => {
-        const newTime = event.target.value; // 사용자가 선택한 새 시간
-        setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
-    };
 
     return(
         <div>
-            <div align={"center"} style={{height:"3rem"}}>
-                <TimeInput type={"time"} value={fromTime} onChange={handleFromTime}/> &nbsp;~&nbsp; <TimeInput type={"time"} onChange={handleUntilTime} value={untilTime}/>
-            </div>
             {/* 이전 다음달 아이콘 */}
             <div className='month-header'>
                 <img src='../../src/assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
@@ -98,7 +78,27 @@ function Calendar(props){
     // 기본화면은 현재 날짜를 선택
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
-    
+
+    const now = new Date();
+    const getNextHour = () => {
+        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
+        return format(now, "HH:mm:00");
+    }
+
+    const [fromTime, setFromTime] = useState(format(now, "HH:mm:00")); // 초기 시간
+    const [untilTime, setUntilTime] = useState(getNextHour); // 초기 시간
+
+    const handleFromTime = (event) => {
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
+        setFromTime(newTime); // 선택된 시간을 상태로 업데이트
+        props.handleFromTime(newTime);
+    };
+    const handleUntilTime = (event) => {
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
+        setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
+        props.handleUntilTime(newTime);
+    };
+
     // 달력의 요일 출력
     const DAYS_LIST = [
         {id: 0, data: 'SUN'},
@@ -135,6 +135,9 @@ function Calendar(props){
 
     return(
         <CalendarWrapper className='calendar-wrapper' open={props.isOpen}>
+            <TimeInputWrapper>
+                <TimeInput type={"time"} value={fromTime} onChange={handleFromTime}/> &nbsp;~&nbsp; <TimeInput type={"time"} onChange={handleUntilTime} value={untilTime}/>
+            </TimeInputWrapper>
             {/* 달 */}
             <RenderMonth currentMonth={currentMonth}
                          prevMonth={prevMonth}
@@ -167,5 +170,10 @@ const CalendarWrapper = styled.div`
 `
 const TimeInput = styled.input`
     color: #ffffff;
+`
+
+const TimeInputWrapper = styled.div`
+    align: "center";
+    height: 3rem;
 `
 export default Calendar
