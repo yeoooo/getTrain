@@ -79,5 +79,14 @@ public class TrainController {
         return ApiResponse.ok("success");
     }
 
+    @GetMapping("/api/v1/check")
+    public ApiResponse<String> check(@RequestParam("email") String email){
+        if (trainServicePool.contains(email)) {
+            return ApiResponse.ok("OK");
+        }
+        return ApiResponse.fail(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
+
+    }
+
 
 }

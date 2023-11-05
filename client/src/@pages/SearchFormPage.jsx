@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import SearchForm from '../@components/search/searchForm'
 import '../style/login.css'
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { checkAccess } from "../util.jsx";
 
 function SearchFormPage(props){
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAccess(navigate);
+  }, []);
+
   const logout = async() => {
     const res = window.confirm("로그아웃 하시겠습니까?");
     if(res === true){
@@ -29,6 +35,7 @@ function SearchFormPage(props){
     }
 
   }
+
 
     return(
         <SearchFormPageMain>

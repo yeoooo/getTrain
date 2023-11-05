@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import '../../style/searchForm.css'
 import TrainTypeInputBox from './trainType/trainTypeInputBox'
 import StationInputBox from './station/stationInputBox'
@@ -18,7 +18,7 @@ function SearchForm(){
     const getNextHour = () => {
         now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
         return format(now, "HH:mm:00");
-    }
+    };
 
     //시간 변수
     const now = new Date();

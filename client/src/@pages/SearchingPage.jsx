@@ -3,6 +3,7 @@ import LoadingAnime from '../@components/searching/loadingAnime';
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { checkAccess } from "../util.jsx";
 
 function SearchingPage() {
   const apiURL = "http://localhost:8080/api/v1/reserve/stop?email=" + sessionStorage.getItem("email");
@@ -11,6 +12,7 @@ function SearchingPage() {
 
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    checkAccess(navigate);
     setIsDarkMode(darkModeMediaQuery.matches);
 
     const darkModeChangeListener = (e) => {

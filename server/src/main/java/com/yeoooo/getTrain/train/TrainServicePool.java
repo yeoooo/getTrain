@@ -60,7 +60,6 @@ public class TrainServicePool {
     public void checkIdleTrainServices() {
         log.info("[TrainServicePool] : {}", pool);
         Iterator<Map.Entry<String, TrainService>> iterator = pool.entrySet().iterator();
-        log.info("[TrainServicePool] : {}", pool);
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         while (iterator.hasNext()) {
@@ -93,6 +92,10 @@ public class TrainServicePool {
             }
         }
         return false;
+    }
+
+    public boolean contains(String email) {
+        return pool.containsKey(email);
     }
 
 }
