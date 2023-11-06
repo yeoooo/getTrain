@@ -80,25 +80,54 @@ function Station(props){
         }
     }
 
-    const onBlurInputDropDownList = () =>{
-        if(arrivalInputValue !== dropDownList[0]){
-            setInputValue(dropDownList[0]);
-            setIsHaveInputValue(false);
-            props.handleDepartStationsItem(dropDownList[0]);
-        } else{
-            setInputValue("");
-            alert("출발역과 도착역이 같아요!");
+    const onBlurInputDropDownList = (event) =>{
+        const input = document.getElementById("inputValue");
+        if(dropDownList.length > 0){
+            if(arrivalInputValue !== dropDownList[0]){
+                setInputValue(dropDownList[0]);
+                setIsHaveInputValue(false);
+                props.handleDepartStationsItem(dropDownList[0]);
+            }else{
+                setInputValue("");
+                if (document.activeElement !== input){
+                    window.alert("출발역과 도착역이 같아요!");
+                }
+                event.target.value = "";
+                event.target.focus();
+            }
+        }else{
+            setInputValue("")
+            if (document.activeElement !== input){
+                window.alert("해당하는 역이 없어요!");
+            }
+            event.target.value = "";
+            event.target.focus();
         }
+
+
     }
 
-    const onBlurArrivalDropDownList = () => {
-        if (inputValue !== arrivalDropDownList[0]) {
-            setArrivalInputValue(arrivalDropDownList[0]);
-            setIsHaveArrivalInputValue(false);
-            props.handleArrivalStationsItem(arrivalDropDownList[0]);
-        } else{
+
+    const onBlurArrivalDropDownList = (event) => {
+        const input = document.getElementById("arrivalInputValue");
+
+        if (arrivalDropDownList.length !== 0) {
+            if (inputValue !== arrivalDropDownList[0]) {
+                props.handleArrivalStationsItem(arrivalDropDownList[0]);
+                setArrivalInputValue(arrivalDropDownList[0]);
+                setIsHaveArrivalInputValue(false);
+            } else{
+                if (event.target.value === inputValue){
+                    setArrivalInputValue("");
+                    alert("출발역과 도착역이 같아요!");
+                }
+            }
+        }else{
             setArrivalInputValue("");
-            alert("출발역과 도착역이 같아요!");
+            if(document.activeElement !== input){
+                window.alert("해당하는 역이 없어요!");
+            }
+            event.target.focus();
         }
     }
 
@@ -110,13 +139,18 @@ function Station(props){
                 {/* 출발역 입력 */}
                 <p>출발역</p>
                 <StationInputBox>
-                    <input 
-                        type='text' 
+                    <input
+                        id={'inputValue'}
+                        type='text'
                         name='departure' 
                         placeholder=' 출발역을 입력해주세요.'
                         value={inputValue}
                         onChange={changeInputValue}
-                        onBlur={onBlurInputDropDownList}/>
+                        onBlur={(event) => {
+                            // onBlurInputValue(event)
+                            onBlurInputDropDownList(event)
+                        }}
+                    />
 
                     {/* 자동완성 드롭다운 */}
                     {isHaveInputValue && (
@@ -133,7 +167,7 @@ function Station(props){
                                         onClick={() => clickDropDownItem(dropDownItem)}
                                         onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
                                         className={dropDownItemIndex === dropDownIndex ? 'selected' : ''}>
-                                        
+
                                         {dropDownItem}
                                     </DropDownItem>
                                 )
@@ -148,13 +182,18 @@ function Station(props){
                 {/* 도착역 입력 */}
                 <p>도착역</p>
                 <StationInputBox>
-                    <input 
+                    <input
+                        id={'arrivalInputValue'}
                         type='text' 
                         name='arrival' 
                         placeholder=' 도착역을 입력해주세요.'
                         value={arrivalInputValue}
                         onChange={changeArrivalInputValue}
-                        onBlur={onBlurArrivalDropDownList}/>
+                        onBlur={(event) => {
+                            onBlurArrivalDropDownList(event)
+                            // onBlurArrivalInputValue(event)
+                        }}
+                    />
                     {/* 자동완성 드롭다운 */}
                     {isHaveArrivalInputValue && (
                         <DropDownBox>
