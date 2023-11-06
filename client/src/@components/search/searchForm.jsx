@@ -75,18 +75,22 @@ function SearchForm(){
                             trainType: trainType,
                             from: departStation,
                             to: arrivalStation,
-                            time_from: timeFrom + fromTime.replace(":", "") + "00",
-                            time_until: timeUntil + untilTime.replace(":", "") + "00"
-                        }
+                            time_from: timeFrom + fromTime.replaceAll(":", ""),
+                            time_until: timeUntil + untilTime.replaceAll(":", "")
+                        },
+                        email: sessionStorage.getItem("email")
                     }
                 }),
-            });
-            if (response.status === 200) {
-                // 추후 추가 코드 작성 예정
-                navigate('/searching');
+            })
+              .then((res) => res.json())
+                .then(navigate('/searching'));
 
+            if (response.status === "OK") {
+                // 추후 추가 코드 작성 예정
+                alert("조회가 완료되었습니다.")
             } else {
-                window.alert("조회가 불가능 합니다.");
+                navigate('/search');
+                window.alert(response.data);
             }
         } catch(error){
             console.log(error.message);

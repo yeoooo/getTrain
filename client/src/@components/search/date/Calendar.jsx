@@ -85,12 +85,12 @@ function Calendar(props){
     const handleFromTime = (event) => {
         const newTime = event.target.value; // 사용자가 선택한 새 시간
         setFromTime(newTime); // 선택된 시간을 상태로 업데이트
-        props.handleFromTime(newTime);
+        props.handleFromTime(newTime+':00');
     };
     const handleUntilTime = (event) => {
         const newTime = event.target.value; // 사용자가 선택한 새 시간
         setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
-        props.handleUntilTime(newTime);
+        props.handleUntilTime(newTime+':00');
     };
 
     // 달력의 요일 출력
