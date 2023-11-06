@@ -35,7 +35,7 @@ function SearchingPage() {
       if (response.status === 'OK') {
         window.alert('조회가 중단되었습니다.');
       } else {
-        window.alert('조회 중단이 불가능합니다.');
+        window.alert(response.data);
       }
       navigate('/search');
     } catch (error) {
