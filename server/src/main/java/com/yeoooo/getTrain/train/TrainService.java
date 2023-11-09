@@ -301,7 +301,13 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         try {
             jsExecutor.executeScript(train.getReserve());
-            driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
+            try {
+                driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
+
+            } catch (UnhandledAlertException e) {
+                log.info("[TrainService - {}] UnhandledAlertException - {}", email, e.getAlertText());
+            }
+
         } catch (Exception e) {
             // 디버그용
             e.printStackTrace();
