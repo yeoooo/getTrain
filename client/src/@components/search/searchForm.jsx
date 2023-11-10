@@ -23,7 +23,7 @@ function SearchForm(){
     //시간 변수
     const now = new Date();
     const [fromTime, setFromTime] = useState(format(new Date(), "HH:mm:00"));
-    const [untilTime, setUntilTime] = useState(getNextHour);
+    const [untilTime, setUntilTime] = useState(getNextHour());
     // 선택 날짜 포맷
     const dateToString = new Date(selectedDate).toISOString();
     const parsedDate = parseISO(dateToString, 'yyyyMMddHHmmss');
