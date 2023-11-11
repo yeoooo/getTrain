@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import '../../style/searchForm.css'
 import TrainTypeInputBox from './trainType/trainTypeInputBox'
 import StationInputBox from './station/stationInputBox'
@@ -12,20 +12,25 @@ function SearchForm(){
     const [trainType, setTrainType] = useState(null);
     const [departStation, setDepartStation] = useState(null);
     const [arrivalStation, setArrivalStation] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const navigate = useNavigate();
 
+    const getNextHour = () => {
+        now.setHours(now.getHours()+1, now.getMinutes(), now.getSeconds());
+        return format(now, "HH:mm:00");
+    };
+
+    //시간 변수
+    const now = new Date();
+    const [fromTime, setFromTime] = useState(format(new Date(), "HH:mm:00"));
+    const [untilTime, setUntilTime] = useState(getNextHour());
     // 선택 날짜 포맷
-    const DatetoString = new Date(selectedDate).toISOString();
-    const parsedDate = parseISO(DatetoString, 'yyyyMMddHHmmss');
+    const dateToString = new Date(selectedDate).toISOString();
+    const parsedDate = parseISO(dateToString, 'yyyyMMddHHmmss');
     // 출발일: 00시로 할당 ('20230822000000' 형식)
-    const timeFrom = format(parsedDate, 'yyyyMMddHHmmss');
+    const timeFrom = format(parsedDate, 'yyyyMMdd');
     // 조회하는 탐색 열차 시간을 해당 날짜 23시 59분까지 탐색 ('20230822235900' 형식)
-    const parsedTimeUtil = setHours(parsedDate, 23);
-    const parsedTimeUtilMinutes = setMinutes(parsedTimeUtil, 59);
-    const timeUtil = format(parsedTimeUtilMinutes, 'yyyyMMddHHmmss');
-    
-    
+    const timeUntil = format(parsedDate, 'yyyyMMdd');
 
     // 조회 버튼 클릭 시 입력값 유효성 검사
     const handleSearch = async (event) => {
@@ -43,26 +48,25 @@ function SearchForm(){
         }
 
         // 열차 타입 재할당
-        if (trainType === '전체') {
-            setTrainType('ALL');
-        } else if (trainType === 'KTX/SRT') {
-            setTrainType('KTX');
-        } else if (trainType === 'ITX-청춘') {
-            setTrainType('ITX');
-        } else if (trainType === '새마을ITX-새마을') {
-            setTrainType('ITX');
-        } else if (trainType === '무궁화/누리로') {
-            setTrainType('MUGUNGHWA');
-        } else {
-            console.log(trainType);
-        }
-        // console.log(trainType);
-        
+        // if (trainType === '전체') {
+        //     setTrainType('ALL');
+        // } else if (trainType === 'KTX/SRT') {
+        //     setTrainType('KTX');
+        // } else if (trainType === 'ITX-청춘') {
+        //     setTrainType('ITX');
+        // } else if (trainType === '새마을ITX-새마을') {
+        //     setTrainType('ITX');
+        // } else if (trainType === '무궁화/누리로') {
+        //     setTrainType('MUGUNGHWA');
+        // } else {
+        //     console.log(trainType);
+        // }
+        // // console.log(trainType);
+
         event.preventDefault();
 
-        
         try {
-            const response = await fetch('/api/v1/reserve', {
+            const response = await fetch('http://127.0.0.1:8080/api/v1/reserve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -71,23 +75,27 @@ function SearchForm(){
                             trainType: trainType,
                             from: departStation,
                             to: arrivalStation,
-                            time_from: timeFrom,
-                            time_until: timeUtil,
-                        }
-                    } 
+                            time_from: timeFrom + fromTime.replaceAll(":", ""),
+                            time_until: timeUntil + untilTime.replaceAll(":", "")
+                        },
+                        email: sessionStorage.getItem("email")
+                    }
                 }),
-            });
-            if (response.status === 200) {
-                // 추후 추가 코드 작성 예정
-                navigate('/searching');  
+            })
+              .then((res) => res.json())
+                .then(navigate('/searching'));
 
+            if (response.status === "OK") {
+                // 추후 추가 코드 작성 예정
+                alert("조회가 완료되었습니다.")
             } else {
-                window.alert("조회가 불가능 합니다.");
+                navigate('/search');
+                window.alert(response.data);
             }
         } catch(error){
             console.log(error.message);
         }
-        
+
     }
 
     return(
@@ -111,7 +119,11 @@ function SearchForm(){
                 <DateInputBox 
                     icon='../../src/assets/calendar.png' 
                     title='출발일을 선택해주세요'
-                    handleSelectedItem={setSelectedDate}/>
+                    handleSelectedItem={setSelectedDate}
+                    fromTime = {fromTime}
+                    untilTime = {untilTime}
+                    handleFromTime={setFromTime}
+                    handleUntilTime={setUntilTime}/>
             </section>
 
             <SearchButton >
@@ -127,13 +139,13 @@ const SearchFormWrapper = styled.div``
 const SearchButton = styled.div`
     display: flex;
     justify-content: center;
-    margin: 0 0;
-
+    height: 10vh;
+    background-color: #121212;
     button{
         padding: 2rem 12rem;
         background-color: #315A52;
         border: none;
-        
+        height: 70%;
         &:hover{
             background-color: #094337;
         }

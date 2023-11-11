@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import '../../../style/calendar.css'
 import styled from 'styled-components';
 import { format, addMonths, subMonths, 
@@ -7,8 +7,9 @@ import { format, addMonths, subMonths,
          startOfWeek, endOfWeek, isBefore } from 'date-fns';
 
 const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
+
     return(
-        <div >
+        <div>
             {/* 이전 다음달 아이콘 */}
             <div className='month-header'>
                 <img src='../../src/assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
@@ -77,7 +78,41 @@ function Calendar(props){
     // 기본화면은 현재 날짜를 선택
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
-    
+
+    const [fromTime, setFromTime] = useState(props.fromTime); // until
+    const [untilTime, setUntilTime] = useState(props.untilTime); // from
+
+    const handleFromTime = (event) => {
+        const newTime = event.target.value + ":00"; // 사용자가 선택한 새 시간
+        setFromTime(newTime); // 선택된 시간을 상태로 업데이트
+
+        let newFromTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
+        let formattedUntilTime = parse((untilTime).replaceAll(":", ""),'HHmmss', new Date());
+        // 출발 시간이 도착시간에 비해 같거나 늦는 경우 도착시간을 출발 시간 + 1 시간으로 수정
+        if (newFromTime.getHours() >= formattedUntilTime.getHours()) {
+            setUntilTime(((newFromTime.getHours()+1) % 24).toString().padStart(2, '0')+ ':' + newFromTime.getMinutes().toString().padStart(2, '0') + ':' + '00');
+        }
+        props.handleFromTime(newTime+':00');
+    };
+    const handleUntilTime = (event) => {
+        const newTime = event.target.value+":00"; // 사용자가 선택한 새 시간
+        setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
+        let formattedFromTime = parse((fromTime).replaceAll(":", ""),'HHmmss', new Date());
+        let newUntilTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
+
+        // 출발 시간이 도착시간에 비해 같거나 늦는 경우 도착시간을 출발 시간 + 1 시간으로 수정
+        if ((formattedFromTime.getHours() > newUntilTime.getHours() || (formattedFromTime.getHours() >= newUntilTime.getHours() && formattedFromTime.getMinutes() >= newUntilTime.getMinutes()))){
+            let hours = ((formattedFromTime.getHours()+1) % 24).toString().padStart(2, '0');
+            let minutes = newUntilTime.getMinutes().toString().padStart(2, '0');
+            let seconds = '00';
+
+            setUntilTime(hours + ':' + minutes + ':' + seconds);
+            alert("출발 시간이 도착 시간과 같거나 늦습니다.");
+        }
+
+        props.handleUntilTime(newTime+':00');
+    };
+
     // 달력의 요일 출력
     const DAYS_LIST = [
         {id: 0, data: 'SUN'},
@@ -102,8 +137,10 @@ function Calendar(props){
 
     // 날짜 선택
     const onClickDate = (date) => {
-        const formattedDay = format(date, 'yyyyMMddHHmmss');
-        const parsedDay = parse(formattedDay, 'yyyyMMddHHmmss', new Date());
+        // const formattedDay = format(date, 'yyyyMMddHHmmss');
+        // const parsedDay = parse(formattedDay, 'yyyyMMddHHmmss', new Date());
+        const formattedDay = format(date, 'yyyyMMdd');
+        const parsedDay = parse(formattedDay, 'yyyyMMdd', new Date());
         setSelectedDate(parsedDay);
         props.handleSelectedItem(parsedDay);
         // console.log(formattedDay);
@@ -112,6 +149,9 @@ function Calendar(props){
 
     return(
         <CalendarWrapper className='calendar-wrapper' open={props.isOpen}>
+            <TimeInputWrapper>
+                <TimeInput type={"time"} value={fromTime} onChange={handleFromTime}/> &nbsp;~&nbsp; <TimeInput type={"time"} onChange={handleUntilTime} value={untilTime}/>
+            </TimeInputWrapper>
             {/* 달 */}
             <RenderMonth currentMonth={currentMonth}
                          prevMonth={prevMonth}
@@ -121,12 +161,12 @@ function Calendar(props){
             {/* 달력 */}
             <div className='calendar-box'>
                 {/* 요일 */}
-                <div className='days-box'> 
+                <div className='days-box'>
                     {DAYS_LIST?.map((DAYS_LIST, key) => (
                         <p>{DAYS_LIST.data}</p>
                     ))}
                 </div>
-                {/* 날짜 */}                
+                {/* 날짜 */}
                 <RenderDate currentMonth={currentMonth}
                             selectedDate={selectedDate}
                             onClickDate={onClickDate}
@@ -142,5 +182,12 @@ const CalendarWrapper = styled.div`
     max-height: ${({ open }) => (open ? '60rem' : '0')};
     transition: opacity 0.1s, visibility 0.3s, max-height 0.7s;
 `
+const TimeInput = styled.input`
+    color: #ffffff;
+`
 
+const TimeInputWrapper = styled.div`
+    align: "center";
+    height: 3rem;
+`
 export default Calendar
