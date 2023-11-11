@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import '../../style/login.css'
 import { styled } from 'styled-components';
+import LoadingModal from "../util/loadingModal.jsx";
 
 function LoginCard(){
     // 배포 시 서버 도메인으로 변경되어야 함
@@ -14,6 +15,31 @@ function LoginCard(){
     const navigate = useNavigate();
     const [phoneNum1, setPhoneNum1] = useState('');
     const [phoneNum2, setPhoneNum2] = useState('');
+    const [loading, setLoading] = useState(false);
+    const loadingTexts = ['불러오는 중..',
+        '불법적인 용도로 사용되지 않길 기도하는 중..',
+        '분명 연착 중인거에요..',
+        '너무 오래 걸리면 \'다시\' 버튼을 눌러주세요..',
+        '사실 \'다시\' 버튼은 개발 중 이에요..'];
+
+    const [loadingText, setLoadingText] = useState("Loading ..");
+
+
+    const updateLoadingText = () => {
+        const nextIdx = Math.floor(Math.random()*(loadingTexts.length))
+        setLoadingText(loadingTexts[nextIdx]);
+    }
+
+    useEffect(() => {
+        let interval;
+        if (loading) {
+            interval = setInterval(updateLoadingText, 2000);
+        }else{
+            clearInterval(interval);
+        }
+
+        return () => clearInterval(interval);
+    }, [loading, loadingText]);
 
     // 로그인 타입
     const handleTypeChange = (event) => {
@@ -47,23 +73,23 @@ function LoginCard(){
 
     const handleLogIn = async (event) => {
         event.preventDefault();
+        setLoading(true)
 
         try {
             const response = await fetch(apiURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     data: {
                         user: {
                             type: type,
                             id: id,
                             pw: pw,
-                            email: email
-                        }
-                    }
+                            email: email,
+                        },
+                    },
                 }),
             }).then((res) => res.json());
-            console.log(response)
             if (response.status === 'OK') {
                 sessionStorage.setItem("email", email);
                 window.alert("로그인이 되었습니다!");
@@ -79,6 +105,8 @@ function LoginCard(){
 
         } catch(error) {
             console.log(error.message);
+        } finally {
+            setLoading(false);
         }
     }
     return(
@@ -86,7 +114,7 @@ function LoginCard(){
             <LogoWrapper className='logo-img'>
                 <img src='../../src/assets/logo.png' alt='logo image' />
             </LogoWrapper>
-            
+            <LoadingModal visible={loading} loadingText={loadingText}/>
 
             <TabMenuWrapper className='tab-menu'>
                 <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')} className={type === 'MEMBERSHIP_LOGIN' ? 'active' : ''}>멤버십번호 로그인</a>
