@@ -87,29 +87,27 @@ function Calendar(props){
         setFromTime(newTime); // 선택된 시간을 상태로 업데이트
 
         let newFromTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
-        let newUntilTime = parse((untilTime).replaceAll(":", ""),'HHmmss', new Date());
-        console.log(fromTime, untilTime);
-        // console.log(newFromTime.getHours().toString().padStart(2, '0'), newUntilTime.getHours(), newFromTime.getHours() <= newUntilTime.getHours());
-        // console.log(String.format((newFromTime.getHours() + 1)%24).padStart(2,'0'), '%02d');
-        if (newFromTime.getHours() >= newUntilTime.getHours()) {
+        let formattedUntilTime = parse((untilTime).replaceAll(":", ""),'HHmmss', new Date());
+        // 출발 시간이 도착시간에 비해 같거나 늦는 경우 도착시간을 출발 시간 + 1 시간으로 수정
+        if (newFromTime.getHours() >= formattedUntilTime.getHours()) {
             setUntilTime(((newFromTime.getHours()+1) % 24).toString().padStart(2, '0')+ ':' + newFromTime.getMinutes().toString().padStart(2, '0') + ':' + '00');
-
         }
         props.handleFromTime(newTime+':00');
     };
     const handleUntilTime = (event) => {
-        const newTime = event.target.value; // 사용자가 선택한 새 시간
-        // setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
-        let newFromTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
-        let newUntilTime = parse((untilTime).replaceAll(":", ""),'HHmmss', new Date());
-        console.log(fromTime.getHours(), newUntilTime.getHours());
-        if (newFromTime.getHours() < newUntilTime.getHours() && newFromTime.getMinutes() < newUntilTime.getMinutes()){
-            let hours = ((newFromTime.getHours()+1) % 24).toString().padStart(2, '0');
-            let minutes = newFromTime.getMinutes().toString().padStart(2, '0');
+        const newTime = event.target.value+":00"; // 사용자가 선택한 새 시간
+        setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
+        let formattedFromTime = parse((fromTime).replaceAll(":", ""),'HHmmss', new Date());
+        let newUntilTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
+
+        // 출발 시간이 도착시간에 비해 같거나 늦는 경우 도착시간을 출발 시간 + 1 시간으로 수정
+        if ((formattedFromTime.getHours() > newUntilTime.getHours() || (formattedFromTime.getHours() >= newUntilTime.getHours() && formattedFromTime.getMinutes() >= newUntilTime.getMinutes()))){
+            let hours = ((formattedFromTime.getHours()+1) % 24).toString().padStart(2, '0');
+            let minutes = newUntilTime.getMinutes().toString().padStart(2, '0');
             let seconds = '00';
 
             setUntilTime(hours + ':' + minutes + ':' + seconds);
-            alert("출발 시간이 도착 시간보다 늦습니다.");
+            alert("출발 시간이 도착 시간과 같거나 늦습니다.");
         }
 
         props.handleUntilTime(newTime+':00');
