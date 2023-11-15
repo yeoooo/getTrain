@@ -28,6 +28,7 @@ import java.util.*;
 @Slf4j
 public class TrainService implements InitializingBean,DisposableBean {
 
+
     private ChromeOptions options = new ChromeOptions(){{
         addArguments("--headless=new");
     }};
@@ -41,6 +42,11 @@ public class TrainService implements InitializingBean,DisposableBean {
     @Setter
     private boolean stop;
 
+    @Setter
+    private int bought = 0;
+
+    private WebDriverWait webDriverWait;
+
     public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
     public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver";
 
@@ -48,12 +54,13 @@ public class TrainService implements InitializingBean,DisposableBean {
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
-        this.driver = new ChromeDriver(options);
-//        this.driver = new ChromeDriver(); 디버깅용 화면 출력
+//        this.driver = new ChromeDriver(options);
+        this.driver = new ChromeDriver(); //디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
         this.mailUtil = mailUtil;
+        this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     /**
@@ -134,7 +141,6 @@ public class TrainService implements InitializingBean,DisposableBean {
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(600));
         try {
             WebElement korailAlert = driver.findElement(By.className("korail_alert"));
             if (korailAlert != null) {
@@ -282,7 +288,6 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(3));
         try {
             Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
             if (alert != null) {
@@ -365,7 +370,6 @@ public class TrainService implements InitializingBean,DisposableBean {
             JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
             jsExecutor.executeScript(aElement.getAttribute("onclick"));
 
-            WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
             try {
                 webDriverWait.until(ExpectedConditions.alertIsPresent());
                 driver.switchTo().alert().accept();
@@ -387,6 +391,19 @@ public class TrainService implements InitializingBean,DisposableBean {
             return false;
         }
         return true;
+    }
+
+    public int getReserved(){
+        String url = "https://www.letskorail.com/ebizprd/EbizPrdTicketpr13500W_pr13510.do";
+        driver.get(url);
+
+        try {
+            WebElement basket = webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.className(".tbl_h.jsClickLayer")));
+            List<WebElement> tr = basket.findElements(By.tagName("tr"));
+            return tr.size();
+        } catch (NoSuchElementException e) {
+           return 0;
+        }
     }
 
 

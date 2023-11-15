@@ -83,7 +83,7 @@ function Calendar(props){
     const [untilTime, setUntilTime] = useState(props.untilTime); // from
 
     const handleFromTime = (event) => {
-        const newTime = event.target.value + ":00"; // 사용자가 선택한 새 시간
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
         setFromTime(newTime); // 선택된 시간을 상태로 업데이트
 
         let newFromTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());
@@ -95,7 +95,7 @@ function Calendar(props){
         props.handleFromTime(newTime+':00');
     };
     const handleUntilTime = (event) => {
-        const newTime = event.target.value+":00"; // 사용자가 선택한 새 시간
+        const newTime = event.target.value; // 사용자가 선택한 새 시간
         setUntilTime(newTime); // 선택된 시간을 상태로 업데이트
         let formattedFromTime = parse((fromTime).replaceAll(":", ""),'HHmmss', new Date());
         let newUntilTime = parse((newTime).replaceAll(":", ""),'HHmmss', new Date());

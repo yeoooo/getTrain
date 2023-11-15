@@ -89,11 +89,12 @@ function SearchForm(){
                 // 추후 추가 코드 작성 예정
                 alert("조회가 완료되었습니다.")
             } else {
-                navigate('/search');
                 window.alert(response.data);
             }
         } catch(error){
             console.log(error.message);
+        } finally {
+            navigate('/search');
         }
 
     }
