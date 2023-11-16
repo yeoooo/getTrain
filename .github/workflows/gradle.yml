@@ -18,7 +18,8 @@ permissions:
 
 jobs:
   build:
-
+    env: 
+      working_directory: ./server
     runs-on: ubuntu-latest
 
     steps:
