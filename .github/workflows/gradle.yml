@@ -19,7 +19,7 @@ permissions:
 jobs:
   build:
     env: 
-      working_directory: ./getTrain/server
+      working_directory: ./server
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         distribution: 'oracle'
     - name: Build
       run: |
-        cd ./server
+        cd ${{ env.working_directory }}
         ./gradlew build
         
       
