@@ -31,7 +31,7 @@ jobs:
         distribution: 'oracle'
     - name: Build
       run: |
-        cd ./getTrain/server
+        cd ./server
         ./gradlew build
         
       
