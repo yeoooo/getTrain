@@ -55,6 +55,7 @@ jobs:
     - name: Upload to S3
       run: |
         aws s3 sync \ 
-        --region ap-northeast-2 ./getTrain-deploy.zip s3://$S3_BUCKET_NAME/getTrain-deploy.zip \
+        --region ap-northeast-2 ./getTrain-deploy.zip \
+        s3://$S3_BUCKET_NAME/getTrain-deploy.zip \
         --delete
     
