@@ -42,7 +42,8 @@ jobs:
         build-root-directory: ./server
         
     - name: Zip builds
-      run: zip -r ./getTrain-deploy.zip
+      run: |
+        zip -r getTrain-deploy.zip ${{env.working_directory}}/build
       shell: bash
     
     - name: AWS credentials
