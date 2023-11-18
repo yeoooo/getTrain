@@ -30,15 +30,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'oracle'
-    # - name: Build
-    #   run: |
-    #     cd ${{ env.working_directory }}
-    #     ./gradlew build
-    - name: Build With Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        arguments: build
-        gradle-version: 8.2
+    - name: Build
+      run: |
+         cd ${{ env.working_directory }}
+         ./gradlew build
     - name: Zip builds
       run: zip -r ./getTrain-deploy.zip
       shell: bash
