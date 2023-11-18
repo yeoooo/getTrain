@@ -19,7 +19,7 @@ permissions:
 jobs:
   build:
     env: 
-      working_directory: ./server
+      working_directory: ./getTrain/server
     runs-on: ubuntu-latest
 
     steps:
@@ -30,9 +30,9 @@ jobs:
         java-version: '17'
         distribution: 'oracle'
     - name: Build
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        gradle-version: 8.2
-        arguments: build
+      run: |
+        cd ./getTrain/server
+        ./gradlew build
+        
       
         
