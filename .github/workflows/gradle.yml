@@ -35,7 +35,7 @@ jobs:
     #     cd ${{ env.working_directory }}
     #     ./gradlew build
     - name: Build With Gradle
-      uses: gradle/gradle-build-action@v1
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
     - name: Zip builds
