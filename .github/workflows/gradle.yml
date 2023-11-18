@@ -53,5 +53,8 @@ jobs:
         aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
         aws-region: ap-northeast-2
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./getTrain-deploy.zip s3://$S3_BUCKET_NAME/getTrain-deploy.zip
+      run: |
+        aws s3 sync \ 
+        --region ap-northeast-2 ./getTrain-deploy.zip s3://$S3_BUCKET_NAME/getTrain-deploy.zip \
+        --delete
     
