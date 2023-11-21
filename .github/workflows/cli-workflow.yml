@@ -33,7 +33,7 @@ jobs:
 
       - name: Build # React Build
         run: >
-          cd ${{env.working_directory}}
+          cd ${{env.working_directory}} 
           yarn build
 
       - name: zip builds
