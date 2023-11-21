@@ -1,4 +1,10 @@
-header > h1{
+/* 라이트 모드 스타일 */
+body {
+    color: #1a1a1a;
+    background-color: #f7f7f7;
+}
+header > h1 {
+    color: #1a1a1a;
     margin: 7rem 0 0 7rem;
     font-size: 4rem;
     font-weight: 800;
@@ -6,20 +12,21 @@ header > h1{
 }
 
 header > p {
+    color: #1a1a1a;
     margin: 2rem 0 0 7.5rem;
     font-size: 1.3rem;
     letter-spacing: 2px;
 }
 
-/* 열차 입력 박스 */
-.input-warpper {
+.input-wrapper {
     display: flex;
     justify-content: center;
     margin: 6rem 0 3rem 0;
 }
 
 .input-box {
-    background-color: #f7f7f7;
+    color: #000000;
+    background-color: #ffffff;
     border-radius: 1rem;
     padding: 2.5rem 3rem 5rem 3rem;
     width: 60%;
@@ -32,7 +39,7 @@ header > p {
     position: relative;
 }
 
-.train-icon{
+.train-icon {
     width: 2rem;
     height: 2rem;
     margin: 0 1.5rem 0 0;
@@ -43,25 +50,13 @@ header > p {
     font-weight: 700;
 }
 
-.arrow-icon {
-    width: 3rem;
-    height: 1.8rem;
-    position: absolute;
-    left: 80rem;
-    bottom: 0.8rem;
-    cursor: pointer;
-    transition: all 0.35s ease;
-}
 
-/* 열차 종류 체크박스 */
-.checkBox-wrap{
+.checkBox-wrap {
     display: flex;
     align-items: center;
     margin: 3rem 0 0 0;
-
     justify-content: center;
     flex-wrap: wrap;
-
     transition: all 0.35s ease;
 }
 
@@ -88,4 +83,39 @@ header > p {
 .checkBox-wrap > p {
     font-size: 1.6rem;
     font-weight: 500;
+}
+
+input{
+    color: #1a1a1a;
+}
+
+/* 다크 모드 스타일 */
+@media (prefers-color-scheme: dark) {
+    body{
+        background-color: #333; /* 다크 모드 배경 색상 업데이트 */
+        height: 140px;
+    }
+
+    header > h1 {
+        color: #fff;
+    }
+
+    header > p {
+        color: #ccc;
+    }
+
+    .input-box {
+        color: #ffffff;
+        /*background-color: #1a1a1a;*/
+        background-color: #1a1a1a;
+        box-shadow: #000 3px 5px 5px;
+    }
+
+    .checkBox-wrap {
+        background-color: #242424;
+        color: #fff;
+    }
+    input{
+        color: #1a1a1a;
+    }
 }

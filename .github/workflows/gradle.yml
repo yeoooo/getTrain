@@ -1,0 +1,64 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: GetTrain CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    env: 
+      working_directory: ./server
+      S3_BUCKET_NAME: gettrain-bucket
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'oracle'
+    # - name: Build
+    #   run: |
+    #     cd ${{ env.working_directory }}
+    #     ./gradlew build
+    - name: Build With Gradle
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      with:
+        arguments: build
+        gradle-version: 8.2
+        build-root-directory: ./server
+        
+    - name: Zip builds
+      run: |
+        zip -r getTrain-deploy.zip ./*
+      shell: bash
+    
+    - name: AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+        aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
+        aws-region: ap-northeast-2
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./getTrain-deploy.zip s3://$S3_BUCKET_NAME/getTrain-deploy.zip
+      
+    - name: Code Deploy
+      run: >
+        aws deploy create-deployment --application-name GetTrainCodeDeploy
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name GetTrainDeployGroup
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
+    

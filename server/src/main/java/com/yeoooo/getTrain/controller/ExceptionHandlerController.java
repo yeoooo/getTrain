@@ -28,7 +28,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<String> unknownExceptionHandler(Exception e) {
-        String errMsg = "알수없는 오류가 발생했습니다.";
+        String errMsg = "알수없는 오류가 발생했습니다.\n관리자에게 문의해주세요.";
         e.printStackTrace();
         return ApiResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR, errMsg);
     }

@@ -99,3 +99,50 @@
     font-weight: 600;
     margin: 0 1.5rem;
 }
+/* 다크 모드 스타일 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .calendar-wrapper {
+        background-color: #1a1a1a;
+    }
+
+    .calendar-wrapper > p {
+        color: #ffffff;
+    }
+
+    .calendar-box {
+        background-color: #1a1a1a;
+        border: 1.3px solid #aec2b0;
+        color: #ffffff;
+    }
+
+    .days-box {
+        color: #ffffff;
+    }
+
+    .col.selected,
+    .selected {
+        background-color: #4b764f;
+        color: #ffffff;
+    }
+
+    .month-header {
+        background-color: #1a1a1a;
+    }
+
+    .month-header > img {
+        cursor: pointer;
+    }
+
+    .month {
+        color: #ffffff;
+    }
+
+    .month > span {
+        color: #ffffff;
+    }
+}

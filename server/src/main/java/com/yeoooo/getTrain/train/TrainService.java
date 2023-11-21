@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -29,7 +28,10 @@ import java.util.*;
 @Slf4j
 public class TrainService implements InitializingBean,DisposableBean {
 
-    private ChromeOptions options;
+
+    private ChromeOptions options = new ChromeOptions(){{
+        addArguments("--headless=new");
+    }};
     private WebDriver driver;
     private String email;
     private String ip;
@@ -40,20 +42,25 @@ public class TrainService implements InitializingBean,DisposableBean {
     @Setter
     private boolean stop;
 
+    @Setter
+    private int bought = 0;
+
+    private WebDriverWait webDriverWait;
+
     public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
     public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver";
 
 
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-        this.options = new ChromeOptions();
-//        this.options.addArguments("--headless"); // 브라우저 창을 표시하지 않고 실행
 
-        this.driver = new ChromeDriver();
+//        this.driver = new ChromeDriver(options);
+        this.driver = new ChromeDriver(); //디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
         this.mailUtil = mailUtil;
+        this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     /**
@@ -65,12 +72,27 @@ public class TrainService implements InitializingBean,DisposableBean {
      *
      * 크롤링을 통해 한 페이지의 기차표를 가지고 오는 함수
      */
-    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until, TrainType trainType) throws InterruptedException {
+    public ArrayList<Train> get_arrivals(String from, String to, LocalDateTime range_from, LocalDateTime range_until, TrainType trainType) throws InterruptedException, ReserveFailedException {
 
         ArrayList<Train> trains = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String reserveUrl = "https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do";
+        Map<String, Integer> calendar = new HashMap<>() {{
+            put("JANUARY", 1);
+            put("FEBRUARY", 2);
+            put("MARCH", 3);
+            put("APRIL", 4);
+            put("MAY", 5);
+            put("JUNE", 6);
+            put("JULY", 7);
+            put("AUGUST", 8);
+            put("SEPTEMBER", 9);
+            put("OCTOBER", 10);
+            put("NOVEMBER", 11);
+            put("DECEMBER", 12);
+        }};
 
-		driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
+        driver.get(reserveUrl);
 
         WebElement input_start = driver.findElement(By.id("start"));
         input_start.clear();
@@ -78,14 +100,31 @@ public class TrainService implements InitializingBean,DisposableBean {
         WebElement input_get = driver.findElement(By.id("get"));
         input_get.clear();
 
+        // 열차 선택 라디오버튼
+        WebElement train_radioBtnWrapper = driver.findElement(By.className("box2"));
+        List<WebElement> labels = train_radioBtnWrapper.findElements(By.tagName("label"));
+        List<WebElement> train_radioBtns = train_radioBtnWrapper.findElements(By.tagName("input"));
+        train_radioBtns.get(trainType.getIndex()).click();
+
+        // 인접역 선택 체크박스 체크(인접역 조회 제외)
+        driver.findElement(By.id("adjcCheckYn")).click();
+
+        //year 입력
         WebElement input_sYear = driver.findElement(By.id("s_year"));
+        Select sYearSelect = new Select(input_sYear);
 
+        //month 입력
         WebElement input_sMonth = driver.findElement(By.id("s_month"));
+        Select sMonthSelect = new Select(input_sMonth);
 
+
+        //day 입력
         WebElement input_sDay = driver.findElement(By.id("s_day"));
+        Select sDaySelect = new Select(input_sDay);
 
+        //hour 입력
         WebElement input_sHour = driver.findElement(By.id("s_hour"));
-
+        Select sHourSelect = new Select(input_sHour);
 //        WebElement input_sWeek = driver.findElement(By.id("s_week"));
 //        WebElement peop01 = driver.findElement(By.id("peop01")); // 어른 인원 수
         WebElement btnInq = driver.findElement(By.className("btn_inq"));
@@ -94,15 +133,36 @@ public class TrainService implements InitializingBean,DisposableBean {
         input_start.sendKeys(from);
         input_get.sendKeys(to);
 
-        input_sYear.sendKeys(String.valueOf(range_from.getYear()));
-        input_sMonth.sendKeys(String.valueOf(range_from.getMonth()));
-        input_sDay.sendKeys(String.valueOf(range_from.getDayOfMonth()));
-        input_sHour.sendKeys(String.valueOf(range_from.getHour()));
+        sYearSelect.selectByValue(String.valueOf(range_from.getYear()));
+        sMonthSelect.selectByValue(calendar.get(String.valueOf(range_from.getMonth())).toString());
+        sDaySelect.selectByIndex(range_from.getDayOfMonth() - 1);
+        sHourSelect.selectByValue(String.valueOf(range_from.getHour()));
+
 
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
+        try {
+            WebElement korailAlert = driver.findElement(By.className("korail_alert"));
+            if (korailAlert != null) {
+                webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.className("korail_alert")));
+                driver.findElement(By.className("korail_alert")).findElement(By.className("plainmodal-close")).click();
+            }
+        } catch (Exception e) {
+            log.info("[TrainService] : korail_alert 요소 없음.");
+        }
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        //조회 결과 유효성 검증
+        try {
+            // 조회 결과 없음
+            WebElement guideMsg = driver.findElement(By.className("guide_msg"));
+            throw new ReserveFailedException("조회 결과가 없습니다.");
+        } catch (TimeoutException e) {
+            // 조회 정상 작동
+        } catch (NoSuchElementException e) {
+            // 조회 정상 작동
+        }
+
+
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("tableResult")));
 
         WebElement tableResult = driver.findElement(By.id("tableResult"));
@@ -137,7 +197,7 @@ public class TrainService implements InitializingBean,DisposableBean {
                 continue;
             }
 
-            TrainType type = null;
+            TrainType type;
             int train_id = 0;
 
             if(train_info.length == 2){
@@ -151,13 +211,12 @@ public class TrainService implements InitializingBean,DisposableBean {
                 }
                 train_id = Integer.parseInt(train_info[0]);
             }
-
             int[] departure_time = Arrays.stream(departure_info[1].split(":")).mapToInt(x -> Integer.parseInt(x)).toArray();
             int t_time = (departure_time[0] * 60) + departure_time[1];
             int r_from = (range_from.getHour() * 60) + range_from.getMinute();
             int r_until = (range_until.getHour() * 60) + range_until.getMinute();
 
-            if (r_from <= t_time && t_time <= r_until && (trainType == TrainType.ALL || trainType.equals(type))){
+            if (r_from <= t_time && t_time <= r_until){
                 trains.add(
                     Train.builder()
                             .division(division)
@@ -182,9 +241,9 @@ public class TrainService implements InitializingBean,DisposableBean {
      * @param loginType
      * @param id
      * @param pw
-     * @return
+     * @return String
      */
-    public boolean login(LoginType loginType, String id, String pw) {
+    public String login(LoginType loginType, String id, String pw) {
         driver.get("https://www.letskorail.com/korail/com/login.do");
         WebElement aElement = driver.findElement(By.className("btn_login")).findElement(By.tagName("a"));
 
@@ -229,14 +288,31 @@ public class TrainService implements InitializingBean,DisposableBean {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(aElement.getAttribute("href"));
 
-        return true;
+        try {
+            Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
+            if (alert != null) {
+                String alertMsg = alert.getText();
+                alert.accept();
+                return alertMsg;
+            }
+
+        } catch (TimeoutException e) {
+            log.info("[TrainService] : 로그인 성공.");
+        }
+            return "";
     }
 
     public boolean reserve(Train train) throws ReserveFailedException {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         try {
             jsExecutor.executeScript(train.getReserve());
-            driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
+            try {
+                driver.get("https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do");
+
+            } catch (UnhandledAlertException e) {
+                log.info("[TrainService - {}] UnhandledAlertException - {}", email, e.getAlertText());
+            }
+
         } catch (Exception e) {
             // 디버그용
             e.printStackTrace();
@@ -278,17 +354,32 @@ public class TrainService implements InitializingBean,DisposableBean {
     /**
      * 드라이버를 통해 로그아웃을 수행하는 함수
      */
-    public void logout() {
+    public boolean logout() {
         driver.get("https://www.letskorail.com/ebizprd/prdMain.do");
         WebElement logout_li = driver.findElement(By.className("gnb_list")).findElements(By.tagName("li")).get(3);
         WebElement aElement = logout_li.findElement(By.tagName("a"));
 
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript(aElement.getAttribute("onclick"));
+        try {
+            //로그인이 되어있지 않은 경우
+            if (aElement.getAttribute("alt").contains("로그아웃") || aElement.getAttribute("alt").toLowerCase().contains("logout")) {
+                return false;
+            }
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        webDriverWait.until(ExpectedConditions.alertIsPresent());
-        driver.switchTo().alert().accept();
+        } catch (NullPointerException e) {
+            //로그인이 되어있어 logout 버튼이 뜨지 않는 경우
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+            jsExecutor.executeScript(aElement.getAttribute("onclick"));
+
+            try {
+                webDriverWait.until(ExpectedConditions.alertIsPresent());
+                driver.switchTo().alert().accept();
+
+            } catch (TimeoutException te) {
+                return true;
+            }
+        }
+        return true;
+
     }
 
     /**
@@ -300,6 +391,19 @@ public class TrainService implements InitializingBean,DisposableBean {
             return false;
         }
         return true;
+    }
+
+    public int getReserved(){
+        String url = "https://www.letskorail.com/ebizprd/EbizPrdTicketpr13500W_pr13510.do";
+        driver.get(url);
+
+        try {
+            WebElement basket = webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.className(".tbl_h.jsClickLayer")));
+            List<WebElement> tr = basket.findElements(By.tagName("tr"));
+            return tr.size();
+        } catch (NoSuchElementException e) {
+           return 0;
+        }
     }
 
 

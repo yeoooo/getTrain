@@ -1,24 +1,64 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import '../../style/login.css'
 import { styled } from 'styled-components';
+import LoadingModal from "../util/loadingModal.jsx";
 
 function LoginCard(){
-    const [type, setType] = useState('');
+    // 배포 시 서버 도메인으로 변경되어야 함
+    const apiURL = 'http://localhost:8080/api/v1/login'
+
+    const [type, setType] = useState('MEMBERSHIP_LOGIN');
     const [id, setId] = useState('');
     const [pw, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
+    const [phoneNum1, setPhoneNum1] = useState('');
+    const [phoneNum2, setPhoneNum2] = useState('');
+    const [loading, setLoading] = useState(false);
+    const loadingTexts = ['불러오는 중..',
+        '불법적인 용도로 사용되지 않길 기도하는 중..',
+        '분명 연착 중인거에요..',
+        '너무 오래 걸리면 \'다시\' 버튼을 눌러주세요..',
+        '사실 \'다시\' 버튼은 개발 중 이에요..'];
+
+    const [loadingText, setLoadingText] = useState("Loading ..");
+
+
+    const updateLoadingText = () => {
+        const nextIdx = Math.floor(Math.random()*(loadingTexts.length))
+        setLoadingText(loadingTexts[nextIdx]);
+    }
+
+    useEffect(() => {
+        let interval;
+        if (loading) {
+            interval = setInterval(updateLoadingText, 2000);
+        }else{
+            clearInterval(interval);
+        }
+
+        return () => clearInterval(interval);
+    }, [loading, loadingText]);
 
     // 로그인 타입
     const handleTypeChange = (event) => {
         setType(event);
-        // console.log(type);
     }
 
     // ID
     const handleIdChange = (event) => {
         setId(event.target.value);
+    }
+
+    const handlePhoneNumber1Change = (event) =>{
+        setPhoneNum1(event.target.value)
+        setId(event.target.value + "-" + phoneNum2);
+    }
+
+    const handlePhoneNumber2Change = (event) =>{
+        setPhoneNum2(event.target.value)
+        setId(phoneNum1 + "-" + event.target.value);
     }
 
     // 비밀번호
@@ -33,36 +73,40 @@ function LoginCard(){
 
     const handleLogIn = async (event) => {
         event.preventDefault();
-        
+        setLoading(true)
+
         try {
-            const response = await fetch('/api/v1/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
+            const response = await fetch(apiURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
                     data: {
                         user: {
                             type: type,
                             id: id,
                             pw: pw,
-                            email: email
-                        }
-                    }
-                }),            
-            });
-
-            if (response.status === 200) {
+                            email: email,
+                        },
+                    },
+                }),
+            }).then((res) => res.json());
+            if (response.status === 'OK') {
                 sessionStorage.setItem("email", email);
-                window.alert("로그인이 되었습니다!"); 
-                navigate('/search');  
+                window.alert("로그인이 되었습니다!");
+                navigate('/search');
 
-            } else if (response.status === 404) {
+            } else if (response.status === 'UNAUTHORIZED') {
                 window.alert("등록되어 있지 않은 아이디 및 비밀번호입니다 :(");
+                window.alert(response.data);
             } else {
                 window.alert("로그인 실패");
+                window.alert(response.data)
             }
 
         } catch(error) {
             console.log(error.message);
+        } finally {
+            setLoading(false);
         }
     }
     return(
@@ -70,12 +114,12 @@ function LoginCard(){
             <LogoWrapper className='logo-img'>
                 <img src='../../src/assets/logo.png' alt='logo image' />
             </LogoWrapper>
-            
+            <LoadingModal visible={loading} loadingText={loadingText}/>
 
             <TabMenuWrapper className='tab-menu'>
-                <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')}>멤버십번호 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('EMAIL_LOGIN')}>이메일 로그인</a>
-                <a href='#' onClick={() => handleTypeChange('PHONE_NUMBER_LOGIN')}>휴대번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('MEMBERSHIP_LOGIN')} className={type === 'MEMBERSHIP_LOGIN' ? 'active' : ''}>멤버십번호 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('EMAIL_LOGIN')} className={type === 'EMAIL_LOGIN' ? 'active' : ''}>이메일 로그인</a>
+                <a href='#' onClick={() => handleTypeChange('PHONE_NUMBER_LOGIN')} className={type === 'PHONE_NUMBER_LOGIN' ? 'active' : ''}>휴대번호 로그인</a>
             </TabMenuWrapper>
 
             <form onSubmit={handleLogIn} className='login-input'>
@@ -107,25 +151,32 @@ function LoginCard(){
                     {type === 'PHONE_NUMBER_LOGIN' && (
                         <>
                             <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon'/>
-                            <LoginInput 
-                                type='number' 
-                                name='phone' 
-                                placeholder='번호를 입력해주세요'
-                                value={id}
-                                required
-                                onChange={handleIdChange} />
-                        </>
-                    )}
-                    {type === '' && (
-                        <>
-                            <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon' />
-                            <LoginInput 
-                                type='number' 
-                                name='phone' 
-                                placeholder='번호를 입력해주세요'
-                                value={id}
-                                required
-                                onChange={handleIdChange} />
+                            <PhoneInput1 name="phone">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="016">016</option>
+                                <option value="017">017</option>
+                                <option value="018">018</option>
+                                <option value="019">019</option>
+                            </PhoneInput1>
+                            <PhoneLoginInput
+                              type='tel'
+                              name='phone'
+                              placeholder='0000'
+                              value={phoneNum1}
+                              required
+                              onChange={handlePhoneNumber1Change}
+                              maxLength={4}
+                            />
+                            <PhoneLoginInput
+                              type='tel'
+                              name='phone'
+                              placeholder='0000'
+                              value={phoneNum2}
+                              required
+                              onChange={handlePhoneNumber2Change}
+                              maxLength={4}
+                                />
                         </>
                     )}
                 </LoginInputBox>
@@ -175,9 +226,10 @@ const TabMenuWrapper = styled.div`
 const LoginInputBox = styled.div``
 
 const MemberIcon = styled.img`
-    width: 21px;
-    height: 22px;
-    padding: 0 0 2px 4px;   
+    width: 23px;
+    height: 24px;
+    padding: 0 0 6px 4px;
+    margin: 5px 0 0 0;
 `
 
 const EmailIcon = styled.img`
@@ -190,7 +242,8 @@ const EmailIcon = styled.img`
 const PhoneIcon = styled.img`
     width: 30px;
     height: 30px;
-    padding: 0 0 2px 3px;   
+    padding: 0  2px 3px;
+    
 `
 
 const NoticeEmailIcon  = styled.img`
@@ -202,18 +255,36 @@ const NoticeEmailIcon  = styled.img`
 
 const LoginInput = styled.input`
     padding: 0 0 0.5rem 2rem;
+    width: 100%;
+`
+
+const PhoneInput1 = styled.select`
+    padding: 0 0 0rem 0.5rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #315A52;
+    margin: 0 10px 0 10px;
+`
+const PhoneLoginInput = styled.input`
+    padding: 0 0 0rem 0.4rem;
+    margin-right: 10px;
+    width: 100%;
 `
 
 const MemberLoginInput = styled.input`
     padding: 0 0 0.5rem 2.8rem;
+    width: 25rem;
 `
 
 const EmailLoginInput = styled.input`
     padding: 0 0 0.5rem 2.5rem;
+    width: 25rem;
 `
 
 const NoticeEmailInput = styled.input`
     padding: 0 0 0.5rem 2.5rem;
+    width: 25rem;
+    width: 100%;
 `
 
 const LoginButton = styled.button`
