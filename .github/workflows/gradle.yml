@@ -9,10 +9,12 @@ name: GetTrain CI with Gradle
 
 on:
   push:
-    paths: "/server"
+    paths: 
+      - "/server/**"
     branches: [ "main" ]
   pull_request:
-    paths: "/server"
+    paths: 
+      - "/server/**"
     branches: [ "main" ]
 
 permissions:
@@ -63,4 +65,5 @@ jobs:
         --deployment-config-name CodeDeployDefault.AllAtOnce
         --deployment-group-name GetTrainDeployGroup
         --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
+        
     
