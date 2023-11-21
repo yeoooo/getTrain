@@ -336,7 +336,7 @@ public class TrainService implements InitializingBean,DisposableBean {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         while (stop) {
-            ArrayList<Train> arrivals = get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
+;            ArrayList<Train> arrivals = get_arrivals(req_train.getFrom(), req_train.getTo(), LocalDateTime.parse(req_train.getTime_from(), dateTimeFormatter), LocalDateTime.parse(req_train.getTime_until(), dateTimeFormatter), req_train.getTrainType());
             if (!arrivals.isEmpty()) {
                 if (reserve(arrivals.get(0))) {
                     mailUtil.sendEmail(email, arrivals.get(0));
