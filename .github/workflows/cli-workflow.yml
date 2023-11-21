@@ -32,7 +32,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build # React Build
-        run: yarn build
+        run: >
+          cd ${{env.working_directory}}
+          yarn build
 
       - name: zip builds
         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
