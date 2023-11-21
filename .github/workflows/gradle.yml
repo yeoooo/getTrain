@@ -43,7 +43,7 @@ jobs:
         
     - name: Zip builds
       run: |
-        zip -r getTrain-deploy.zip ${{env.working_directory}}/build
+        zip -r getTrain-deploy.zip ./*
       shell: bash
     
     - name: AWS credentials
