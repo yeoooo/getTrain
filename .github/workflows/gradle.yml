@@ -10,11 +10,11 @@ name: GetTrain CI with Gradle
 on:
   push:
     paths: 
-      - "/server"
+      - "/server/**"
     branches: [ "main" ]
   pull_request:
     paths: 
-      - "/server"
+      - "/server/**"
     branches: [ "main" ]
 
 permissions:
