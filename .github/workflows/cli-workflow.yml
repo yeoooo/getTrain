@@ -33,6 +33,7 @@ jobs:
 
       - name: Build # React Build
         run: |
+          ls
           cd ${{env.working_directory}} 
           yarn build
 
