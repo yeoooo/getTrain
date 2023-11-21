@@ -2,63 +2,63 @@ name: GetTrain Client CI
 
 on:
   push:
-  #   paths:
-  #     - 'client/**'
+    paths:
+      - 'client/**'
     branches: [ "main" ]
     
   pull_request:
-    # paths:
-    #   - 'client/**'
+    paths:
+      - 'client/**'
     branches: [ "main" ]
 
 permissions:
   contents: read
     
-# jobs:
-#   build:
-#     env:
-#       working_directory: ./client
-#       S3_BUCKET_NAME: gettrain-bucket  
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    env:
+      working_directory: ./client
+      S3_BUCKET_NAME: gettrain-bucket  
+    runs-on: ubuntu-latest
     
-#     steps:
-#       - name: Checkout source code. # Repo checkout
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout source code. # Repo checkout
+        uses: actions/checkout@v2
 
-#       - name: Check Node v # Node v 확인
-#         run: node -v
+      - name: Check Node v # Node v 확인
+        run: node -v
 
-#       - name: Install Dependencies # 의존 파일 설치
-#         run: yarn install --frozen-lockfile
+      - name: Install Dependencies # 의존 파일 설치
+        run: yarn install --frozen-lockfile
 
-#       - name: Build # React Build
-#         run: yarn build
+      - name: Build # React Build
+        run: yarn build
 
-#       - name: zip builds
-#         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
-#         run: |
-#           zip -r getTrain-cli-deploy.zip ${{env.working_directory}}/*
-#         shell: bash
+      - name: zip builds
+        # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
+        run: |
+          zip -r getTrain-cli-deploy.zip ${{env.working_directory}}/*
+        shell: bash
 
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-#       - name: AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
-#           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
-#           aws-region: ap-northeast-2
-#       - name: Upload to S3
-#         run: aws s3 cp --region ap-northeast-2 ./getTrain-cli-deploy.zip s3://$S3_BUCKET_NAME/getTrain-cli-deploy.zip
+      - name: AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
+          aws-region: ap-northeast-2
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./getTrain-cli-deploy.zip s3://$S3_BUCKET_NAME/getTrain-cli-deploy.zip
         
-#       - name: Code Deploy
-#         run: >
-#           aws deploy create-deployment --application-name GetTrainCodeDeploy
-#           --deployment-config-name CodeDeployDefault.AllAtOnce
-#           --deployment-group-name GetTrainDeployGroup
-#           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
+      - name: Code Deploy
+        run: >
+          aws deploy create-deployment --application-name GetTrainCodeDeploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name GetTrainDeployGroup
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
