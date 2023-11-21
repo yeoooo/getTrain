@@ -2,13 +2,13 @@ name: GetTrain Client CI
 
 on:
   push:
-    paths:
-      - 'client/**'
+    # paths:
+    #   - 'client/**'
     branches: [ "main" ]
     
   pull_request:
-    paths:
-      - 'client/**'
+    # paths:
+    #   - 'client/**'
     branches: [ "main" ]
 
 permissions:
