@@ -32,7 +32,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build # React Build
-        run: >
+        run: |
           cd ${{env.working_directory}} 
           yarn build
 
