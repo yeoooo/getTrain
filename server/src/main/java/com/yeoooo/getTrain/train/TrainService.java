@@ -422,6 +422,5 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
     }
 }
