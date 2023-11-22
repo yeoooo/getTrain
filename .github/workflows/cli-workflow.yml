@@ -63,4 +63,4 @@ jobs:
         aws deploy create-deployment --application-name GetTrainCodeDeploy
         --deployment-config-name CodeDeployDefault.AllAtOnce
         --deployment-group-name GetTrainDeployGroup
-        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-cli-deploy.zip
