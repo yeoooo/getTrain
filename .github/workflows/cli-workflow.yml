@@ -17,29 +17,28 @@ permissions:
 jobs:
   build:
     env:
-      CI: false
       working_directory: ./client
       S3_BUCKET_NAME: gettrain-bucket  
+
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
         
     runs-on: ubuntu-latest
     
     steps:
-      - name: 체크아웃 Github-Action
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: node.js 14 설치 ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-      - name: npm 설치
-        run: npm install
-
-      - name: npm 빌드
-        run: npm run build
+      - name: npm install and build
+        run: |
+          npm install
+          npm run build
 
       - name: zip builds
         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
