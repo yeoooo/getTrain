@@ -17,6 +17,7 @@ permissions:
 jobs:
   build:
     env:
+      CI: false
       working_directory: ./client
       S3_BUCKET_NAME: gettrain-bucket  
     strategy:
@@ -34,11 +35,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: npm 설치
-        run: npm install
+      - name: install yarn
+        run: npm install -g yarn
 
-      - name: npm 빌드
-        run: npm run build
+      - name: yarn build
+        run: yarn build
 
       - name: zip builds
         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
