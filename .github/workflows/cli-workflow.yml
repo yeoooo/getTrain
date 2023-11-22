@@ -29,7 +29,7 @@ jobs:
         run: node -v
 
       - name: Install Dependencies # 의존 파일 설치
-        uses: action/setup-node@v2
+        uses: actions/setup-node@v2
       - run: npm ci
 
       - name: Build # React Build
