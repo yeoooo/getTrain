@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working_directory: ./client
+      S3_BUCKET_NAME: gettrain-bucket
     strategy:
       matrix:
         node-version: [16.x]
