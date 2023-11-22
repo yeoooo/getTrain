@@ -4,12 +4,12 @@ on:
   push:
     # paths:
     #   - 'client/**'
-    branches: [ "main" ]
+    branches: [ "yeoooo-2/deploy" ]
     
   pull_request:
     # paths:
     #   - 'client/**'
-    branches: [ "main" ]
+    branches: [ "yeoooo-2/deploy" ]
 
 permissions:
   contents: read
