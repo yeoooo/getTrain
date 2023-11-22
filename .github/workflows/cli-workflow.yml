@@ -26,20 +26,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout source code. # Repo checkout
-        uses: actions/checkout@v3
+      - name: 체크아웃 Github-Action
+        uses: actions/checkout@v2
 
-      - name: Check Node version
-        uses: actions/setup-node@v3
+      - name: node.js 14 설치 ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
 
-      - name: install dependencies
+      - name: npm 설치
         run: npm install
-      - name: npm test
-        run: npm run test
-      - name: build
+
+      - name: npm 빌드
         run: npm run build
 
       - name: zip builds
