@@ -1,70 +1,59 @@
-name: GetTrain Client CI
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
 
 on:
   push:
-    # paths:
-    #   - 'client/**'
     branches: [ "yeoooo-2/deploy" ]
-    
   pull_request:
-    # paths:
-    #   - 'client/**'
     branches: [ "yeoooo-2/deploy" ]
 
-permissions:
-  contents: read
-    
 jobs:
   build:
-    env:
-      working_directory: ./client
-      S3_BUCKET_NAME: gettrain-bucket  
+
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x]
-        
-    runs-on: ubuntu-latest
-    
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
 
-      - name: node.js 14 설치 ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+    - name: zip builds
+      run: |
+        zip -r getTrain-cli-deploy.zip ${{env.working_directory}}/*
+      shell: bash
 
-      - name: npm install and build
-        run: |
-          npm install
-          npm run build
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: zip builds
-        # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
-        run: |
-          zip -r getTrain-cli-deploy.zip ${{env.working_directory}}/*
-        shell: bash
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
-          aws-region: ap-northeast-2
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./getTrain-cli-deploy.zip s3://$S3_BUCKET_NAME/getTrain-cli-deploy.zip
-        
-      - name: Code Deploy
-        run: >
-          aws deploy create-deployment --application-name GetTrainCodeDeploy
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name GetTrainDeployGroup
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
+    - name: AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+        aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS}}
+        aws-region: ap-northeast-2
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./getTrain-cli-deploy.zip s3://$S3_BUCKET_NAME/getTrain-cli-deploy.zip
+      
+    - name: Code Deploy
+      run: >
+        aws deploy create-deployment --application-name GetTrainCodeDeploy
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name GetTrainDeployGroup
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getTrain-deploy.zip
