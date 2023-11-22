@@ -29,12 +29,13 @@ jobs:
         run: node -v
 
       - name: Install Dependencies # 의존 파일 설치
-        run: npm install
+        uses: action/setup-node@v2
+      - run: npm ci
 
       - name: Build # React Build
         run: |
           cd ${{env.working_directory}}
-          npm run build
+          npm ci
 
       - name: zip builds
         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
