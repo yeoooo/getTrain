@@ -48,14 +48,15 @@ public class TrainService implements InitializingBean,DisposableBean {
     private WebDriverWait webDriverWait;
 
     public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver";
+//    public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver"; // dev 환경
+    public static final String WEB_DRIVER_PATH = "chromedriver-linux64"; // run 환경
 
 
     public TrainService(String ip, String email, MailUtil mailUtil){
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 
-//        this.driver = new ChromeDriver(options);
-        this.driver = new ChromeDriver(); //디버깅용 화면 출력
+        this.driver = new ChromeDriver(options);
+//        this.driver = new ChromeDriver(); //디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
