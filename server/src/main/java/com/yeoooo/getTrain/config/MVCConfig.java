@@ -17,6 +17,7 @@ public class MVCConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         //배포 시 클라이언트의 도메인으로 변경되어야 함
-        registry.addMapping("/api/**").allowedOrigins("http://127.0.0.1:5173");
+        registry.addMapping("/api/**").allowedOrigins("http://ec2-13-125-250-57.ap-northeast-2.compute.amazonaws.com:3000")
+                .maxAge(3600);
     }
 }
