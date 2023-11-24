@@ -10,8 +10,6 @@ function LoadingAnime(){
             </AnimeBox>
         </AnimeWrapper>
     )
-        
-        
 }
 
 const AnimeWrapper = styled.div`
