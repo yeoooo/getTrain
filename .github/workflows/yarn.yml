@@ -37,8 +37,7 @@ jobs:
     - name: Install Dependencies
       run: |
         cd ${{env.working_directory}}
-        yarn install
-        # yarn install --frozen-lockfile
+        yarn install --frozen-lockfile
     - name: Build
       run: |
         cd ${{env.working_directory}}
