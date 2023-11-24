@@ -49,7 +49,7 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 //    public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver"; // dev 환경
-    public static final String WEB_DRIVER_PATH = "chromedriver-linux64"; // run 환경
+    public static final String WEB_DRIVER_PATH = "chromedriver-linux64/chromedriver"; // run 환경
 
 
     public TrainService(String ip, String email, MailUtil mailUtil){
