@@ -112,7 +112,7 @@ function LoginCard(){
     return(
         <LoginInputWrapper className='login-box'>
             <LogoWrapper className='logo-img'>
-                <img src='../../src/assets/logo.png' alt='logo image' />
+                <img src='./assets/logo.png' alt='logo image' />
             </LogoWrapper>
             <LoadingModal visible={loading} loadingText={loadingText}/>
 
@@ -182,7 +182,7 @@ function LoginCard(){
                 </LoginInputBox>
                 
                 <div>
-                    <img src='../../src/assets/Lock-icon.png' alt='Lock icon' width={30} height={30}/>
+                    <img src='./assets/Lock-icon.png' alt='Lock icon' width={30} height={30}/>
                     <LoginInput 
                         type='password' 
                         name='password' 
@@ -193,7 +193,7 @@ function LoginCard(){
                 </div>
 
                 <div>
-                    <NoticeEmailIcon src='../../src/assets/notice-email.png' alt='Lock icon'/>
+                    <NoticeEmailIcon src='./assets/notice-email.png' alt='Lock icon'/>
                     <NoticeEmailInput 
                         type='email' 
                         name='email' 
