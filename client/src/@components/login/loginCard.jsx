@@ -6,7 +6,7 @@ import LoadingModal from "../util/loadingModal.jsx";
 
 function LoginCard(){
     // 배포 시 서버 도메인으로 변경되어야 함
-    const apiURL = 'http://localhost:8080/api/v1/login'
+    const apiURL = 'http://ec2-3-34-52-150.ap-northeast-2.compute.amazonaws.com:8080/api/v1/login'
 
     const [type, setType] = useState('MEMBERSHIP_LOGIN');
     const [id, setId] = useState('');
