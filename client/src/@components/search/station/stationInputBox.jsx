@@ -50,7 +50,7 @@ function StationInputBox(props){
               <div className='input-box-header'>
                   <img src={props.icon} className='train-icon' alt='icon'/>
                   <h3>{selectedDepartStation} → {selectedArrivalStation}</h3>
-                  <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle} style={arrowDirection}/></a>
+                  <a href='#'><ArrowIcon src='./src/assets/arrow.png' className='arrow-icon' alt='arrow icon' onClick={handleAccordionToggle} style={arrowDirection}/></a>
               </div>
               <InputSection title={props.title} handleDepartStationsItem={handleDepartStationsItem} handleArrivalStationsItem={handleArrivalStationsItem} isOpen={isOpen}/>
           </div>

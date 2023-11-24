@@ -126,7 +126,7 @@ function LoginCard(){
                 <LoginInputBox>
                     {type === 'MEMBERSHIP_LOGIN' && (
                         <>
-                            <MemberIcon src='../../src/assets/member.png' alt='Membership icon' width={15} height={15}/>
+                            <MemberIcon src='./assets/member.png' alt='Membership icon' width={15} height={15}/>
                             <MemberLoginInput 
                                 type='text' 
                                 name='membership' 
@@ -138,7 +138,7 @@ function LoginCard(){
                     )}
                     {type === 'EMAIL_LOGIN' && (
                         <>
-                            <EmailIcon src='../../src/assets/email.png' alt='Email icon' />
+                            <EmailIcon src='./assets/email.png' alt='Email icon' />
                             <EmailLoginInput 
                                 type='email' 
                                 name='email' 
@@ -150,7 +150,7 @@ function LoginCard(){
                     )}
                     {type === 'PHONE_NUMBER_LOGIN' && (
                         <>
-                            <PhoneIcon src='../../src/assets/Phone-icon.png' alt='Phone icon'/>
+                            <PhoneIcon src='./assets/Phone-icon.png' alt='Phone icon'/>
                             <PhoneInput1 name="phone">
                                 <option value="010">010</option>
                                 <option value="011">011</option>
