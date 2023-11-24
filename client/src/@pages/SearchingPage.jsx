@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { checkAccess } from "../util.jsx";
 
 function SearchingPage() {
-  const apiURL = "http://localhost:8080/api/v1/reserve/stop?email=" + sessionStorage.getItem("email");
+  const apiURL = "http://ec2-3-34-52-150.ap-northeast-2.compute.amazonaws.com:8080/api/v1/reserve/stop?email=" + sessionStorage.getItem("email");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
 

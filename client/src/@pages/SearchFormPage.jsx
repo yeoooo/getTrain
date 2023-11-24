@@ -8,6 +8,7 @@ import { checkAccess } from "../util.jsx";
 function SearchFormPage(props){
   const navigate = useNavigate();
 
+  const apiURL = 'http://ec2-3-34-52-150.ap-northeast-2.compute.amazonaws.com'
   useEffect(() => {
     checkAccess(navigate);
   }, []);
@@ -16,7 +17,7 @@ function SearchFormPage(props){
     const res = window.confirm("로그아웃 하시겠습니까?");
     if(res === true){
       try{
-        const resp = await fetch("http://localhost:8080/api/v1/logout?email=" + sessionStorage.getItem("email"),
+        const resp = await fetch(apiURL + "/api/v1/logout?email=" + sessionStorage.getItem("email"),
         {
           method: "GET"
         })
