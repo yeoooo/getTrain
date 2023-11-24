@@ -12,12 +12,12 @@ const RenderMonth = ({ currentMonth, prevMonth, nextMonth }) => {
         <div>
             {/* 이전 다음달 아이콘 */}
             <div className='month-header'>
-                <img src='../../src/assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
+                <img src='./assets/calendar_arrow.png' onClick={prevMonth} style={{transform: 'rotate(180deg)', margin: '0 0 1rem 0'}}/>
                 <div className='month'>
                     <span> {format(currentMonth, 'M')}월 </span>
                     {format(currentMonth, 'yyyy')}
                 </div>
-                <img src='../../src/assets/calendar_arrow.png' onClick={nextMonth} style={{margin: '0 0 1.3rem 0'}}/>
+                <img src='./assets/calendar_arrow.png' onClick={nextMonth} style={{margin: '0 0 1.3rem 0'}}/>
             </div>
         </div>
     )
