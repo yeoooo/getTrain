@@ -32,7 +32,7 @@ function TrainTypeInputBox(props){
                   <div className='input-box-header'>
                       <img src={props.icon} className='train-icon' alt='icon'/>
                       <h3>{selectedItem === null ? props.title : selectedItem}</h3>
-                      <a href='#'><ArrowIcon src='../../src/assets/arrow.png' className='arrow-icon' alt='arrow icon' style={arrowDirection} onClick={handleAccordionToggle}/></a>
+                      <a href='#'><ArrowIcon src='./assets/arrow.png' className='arrow-icon' alt='arrow icon' style={arrowDirection} onClick={handleAccordionToggle}/></a>
                   </div>
                   <InputSection title={props.title} handleSelectedItem={handleSelectedItem} isOpen={isOpen}/>
               </div>

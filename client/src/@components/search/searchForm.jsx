@@ -109,16 +109,16 @@ function SearchForm(){
             
             <section>
                 <TrainTypeInputBox 
-                    icon='../../src/assets/train.png' 
+                    icon='./assets/train.png'
                     title='열차 종류를 선택해주세요' 
                     handleSelectedItem = {setTrainType}/>
                 <StationInputBox 
-                    icon='../../src/assets/train.png' 
+                    icon='./assets/train.png'
                     title='출발역 → 도착역'
                     handleDepartStationsItem={setDepartStation}
                     handleArrivalStationsItem={setArrivalStation}/>
                 <DateInputBox 
-                    icon='../../src/assets/calendar.png' 
+                    icon='./assets/calendar.png'
                     title='출발일을 선택해주세요'
                     handleSelectedItem={setSelectedDate}
                     fromTime = {fromTime}
