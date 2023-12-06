@@ -20,6 +20,7 @@ else
   echo "> kill -9 $CURRENT_PID" >> /home/ubuntu/action/deploy.log
   sudo kill -9 $CURRENT_PID
   sleep 5
+  java -jar $(ls | grep 'getTrain-[0-9]\+\.[0-9]\+\.[0-9]\+-SNAPSHOT.jar' | sort -V | tail -n 1)
 fi
 
 
