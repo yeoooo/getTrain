@@ -2,6 +2,7 @@ package com.yeoooo.getTrain.train;
 
 import com.yeoooo.getTrain.exception.ReserveFailedException;
 import com.yeoooo.getTrain.util.MailUtil;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,9 +30,10 @@ import java.util.*;
 public class TrainService implements InitializingBean,DisposableBean {
 
 
-    private ChromeOptions options = new ChromeOptions(){{
+    private final ChromeOptions options = new ChromeOptions(){{
         addArguments("--headless=new");
     }};
+
     private WebDriver driver;
     private String email;
     private String ip;
@@ -47,21 +49,15 @@ public class TrainService implements InitializingBean,DisposableBean {
 
     private WebDriverWait webDriverWait;
 
-    public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-//    public static final String WEB_DRIVER_PATH = "chromedriver-mac-arm64/chromedriver"; // dev 환경
-    public static final String WEB_DRIVER_PATH = "/home/ubuntu/action/chromedriver-linux64/chromedriver"; // run 환경
-
 
     public TrainService(String ip, String email, MailUtil mailUtil){
-        System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-
+        WebDriverManager.chromedriver().setup();
         this.driver = new ChromeDriver(options);
-//        this.driver = new ChromeDriver(); //디버깅용 화면 출력
         this.ip = ip;
         this.email = email;
         this.lastRequestTime = LocalDateTime.now();
         this.mailUtil = mailUtil;
-        this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     /**
@@ -133,7 +129,6 @@ public class TrainService implements InitializingBean,DisposableBean {
 
         input_start.sendKeys(from);
         input_get.sendKeys(to);
-
         sYearSelect.selectByValue(String.valueOf(range_from.getYear()));
         sMonthSelect.selectByValue(calendar.get(String.valueOf(range_from.getMonth())).toString());
         sDaySelect.selectByIndex(range_from.getDayOfMonth() - 1);
