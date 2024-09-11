@@ -74,19 +74,19 @@ public class TrainService implements InitializingBean,DisposableBean {
         ArrayList<Train> trains = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String reserveUrl = "https://www.letskorail.com/ebizprd/EbizPrdTicketpr21100W_pr21110.do";
-        Map<String, Integer> calendar = new HashMap<>() {{
-            put("JANUARY", 1);
-            put("FEBRUARY", 2);
-            put("MARCH", 3);
-            put("APRIL", 4);
-            put("MAY", 5);
-            put("JUNE", 6);
-            put("JULY", 7);
-            put("AUGUST", 8);
-            put("SEPTEMBER", 9);
-            put("OCTOBER", 10);
-            put("NOVEMBER", 11);
-            put("DECEMBER", 12);
+        Map<String, String> calendar = new HashMap<>() {{
+            put("JANUARY", "01");
+            put("FEBRUARY", "02");
+            put("MARCH", "03");
+            put("APRIL", "04");
+            put("MAY", "05");
+            put("JUNE", "06");
+            put("JULY", "07");
+            put("AUGUST", "08");
+            put("SEPTEMBER", "09");
+            put("OCTOBER", "10");
+            put("NOVEMBER", "11");
+            put("DECEMBER", "12");
         }};
 
         driver.get(reserveUrl);
